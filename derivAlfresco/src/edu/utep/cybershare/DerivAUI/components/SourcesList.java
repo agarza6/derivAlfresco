@@ -33,11 +33,13 @@ public class SourcesList extends IndividualList {
 	private AlfrescoClient aClient;
 	
 	public SourcesList(AlfrescoClient ac){
+		System.out.println("here");
 		aClient = ac;
 		queryPMLP();
 	}
 
 	private void queryPMLP(){
+		System.out.println("now here");
 		 individuals = new Vector<Individual>();
 
 		String query = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + 

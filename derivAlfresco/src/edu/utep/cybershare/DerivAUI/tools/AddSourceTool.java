@@ -91,7 +91,7 @@ public class AddSourceTool extends JFrame {
 
 	//Model variables
 	private String shortName, fullName, URL, project, lname, fname;
-	private String uploaderName, uploaderPass, server;
+//	private String uploaderName, uploaderPass, server;
 	private String email, title, depiction, phone, homepage, workpage, projectpage, schoolpage, sha1Sum;
 	static String pmlp_url, OrgURL, memberOfURI,memberOfName;
 
@@ -480,13 +480,12 @@ public class AddSourceTool extends JFrame {
 
 		String pmlP = "";
 
-		aClient = new AlfrescoClient();
-		aClient.logIn("admin", "admin", "http://localhost:8080/alfresco");
-		String node_pmlp_url = aClient.createNode("ProjectY", shortName + ".owl");
-		pmlp_url = "http://localhost:8080/alfresco" + node_pmlp_url;
+//		aClient = new AlfrescoClient();
+//		aClient.logIn(uploaderName, uploaderPass, server);
+		String node_pmlp_url = aClient.createNode(project, shortName + ".owl");
 
 		//if(FOAFCheckBox.isSelected()){
-		pmlP = getPML();
+		pmlP = getPML(aClient.getBaseUrl() + node_pmlp_url);
 		//}else{
 		//	pmlP = getPML_FOAF();
 		//}
@@ -516,7 +515,7 @@ public class AddSourceTool extends JFrame {
 		setVisible(false);
 	}
 
-	private String getPML(){
+	private String getPML(String pmlp_url){
 
 		String pmlp_uri = pmlp_url.trim() + "#" + shortName;
 		pmlp_uri.replaceAll("(\\r|\\n)", "");

@@ -170,7 +170,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	public DerivAUI() {
 		initComponents();
 		serverLogin();
-		initTripleStoreComponents();
+//		initTripleStoreComponents();
 	}
 
 	public void setSelectedOntology(String sel){
@@ -1195,7 +1195,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			conclusionFromURLTab.setEnabled(false);
 	}
 
-	public void serverLogin() {
+	public boolean serverLogin() {
 
 		int intents = 0;
 		
@@ -1210,14 +1210,18 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			System.exit(0);
 		}
 		
+		return true;
+		
 	}
 	
-	public void setCredentials(String UN, String PS, String server){
+	public void setCredentials(String UN, String PS, String server, String project){
 		username = UN;
 		password = PS;
 		selectedServerSTR = server;
+		selectedProjectSTR = project;
 		System.out.println(username + " - " + password);
 		System.out.println(selectedServerSTR);
+		initTripleStoreComponents();
 	}
 	
 	public static void main(String args[]) {
@@ -1262,26 +1266,32 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		@Override
 		public Void doInBackground() {
 
+			System.out.println("Loading Sources");
 			ProgressBar.setString("Loading Sources");
 			SourcesPML_Nodes = new SourcesList(aClient).getSourceList();
 			SourcesList.setModel(SourcesPML_Nodes);
 			setProgress(15);
 
+			System.out.println("Loading Formats");
 			ProgressBar.setString("Loading Data Formats");
 			conclusionFormatComboBox.queryFormats();
+			System.out.println("Loading Types");
 			ProgressBar.setString("Loading Data Types");
 			setProgress(35);
 
 			conclusionTypeComboBox.queryAgents();
+			System.out.println("Loading Agent");
 			ProgressBar.setString("Loading Inference Agents");
 			setProgress(50);
 
 			agentComboBox.queryAgents();
+			System.out.println("Loading Rules");
 			ProgressBar.setString("Loading Inference Rules");
 			setProgress(65);
 
 			inferenceRuleComboBox.queryAgents();
-			ProgressBar.setString("Loading Antecedensts");
+			System.out.println("Loading Antecedents");
+			ProgressBar.setString("Loading Antecedents");
 			setProgress(79);
 
 			Project_PMLJ_Nodes = new PMLJList(selectedProjectSTR).getPMLList();

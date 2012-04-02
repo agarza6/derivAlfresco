@@ -44,21 +44,21 @@ import edu.utep.cybershare.DerivAUI.DerivAUI;
 
 public class AlfrescoClient extends javax.swing.JFrame {
 
-    // Variables declaration - do not modify
-    private javax.swing.JLabel Label;
-    private javax.swing.JLabel Label2;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JLabel passwordLabel;
-    private javax.swing.JPasswordField passwordText;
-    private javax.swing.JLabel projectLabel;
-    private javax.swing.JTextField projectText;
-    private javax.swing.JSeparator separator;
-    private javax.swing.JLabel serverLabel;
-    private javax.swing.JTextField serverText;
-    private javax.swing.JButton submitButton;
-    private javax.swing.JLabel usernameLabel;
-    private javax.swing.JTextField usernameText;
-    // End of variables declaration
+	// Variables declaration - do not modify
+	private javax.swing.JLabel Label;
+	private javax.swing.JLabel Label2;
+	private javax.swing.JButton cancelButton;
+	private javax.swing.JLabel passwordLabel;
+	private javax.swing.JPasswordField passwordText;
+	private javax.swing.JLabel projectLabel;
+	private javax.swing.JTextField projectText;
+	private javax.swing.JSeparator separator;
+	private javax.swing.JLabel serverLabel;
+	private javax.swing.JTextField serverText;
+	private javax.swing.JButton submitButton;
+	private javax.swing.JLabel usernameLabel;
+	private javax.swing.JTextField usernameText;
+	// End of variables declaration
 
 	public DerivAUI inst;
 
@@ -123,118 +123,118 @@ public class AlfrescoClient extends javax.swing.JFrame {
 	private void initComponents() {
 
 		Label = new javax.swing.JLabel();
-        usernameLabel = new javax.swing.JLabel();
-        passwordLabel = new javax.swing.JLabel();
-        usernameText = new javax.swing.JTextField();
-        cancelButton = new javax.swing.JButton();
-        submitButton = new javax.swing.JButton();
-        passwordText = new javax.swing.JPasswordField();
-        separator = new javax.swing.JSeparator();
-        serverLabel = new javax.swing.JLabel();
-        serverText = new javax.swing.JTextField();
-        projectLabel = new javax.swing.JLabel();
-        projectText = new javax.swing.JTextField();
-        Label2 = new javax.swing.JLabel();
+		usernameLabel = new javax.swing.JLabel();
+		passwordLabel = new javax.swing.JLabel();
+		usernameText = new javax.swing.JTextField();
+		cancelButton = new javax.swing.JButton();
+		submitButton = new javax.swing.JButton();
+		passwordText = new javax.swing.JPasswordField();
+		separator = new javax.swing.JSeparator();
+		serverLabel = new javax.swing.JLabel();
+		serverText = new javax.swing.JTextField();
+		projectLabel = new javax.swing.JLabel();
+		projectText = new javax.swing.JTextField();
+		Label2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        this.setTitle("Alfresco Server Login");
-        
-        Label.setText("Set Authentication ");
+		this.setTitle("Alfresco Server Login");
 
-        usernameLabel.setText("Username:");
+		Label.setText("Set Authentication ");
 
-        passwordLabel.setText("Password:");
+		usernameLabel.setText("Username:");
 
-        cancelButton.setText("Cancel");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
-            }
-        });
+		passwordLabel.setText("Password:");
 
-        submitButton.setText("Submit");
-        submitButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                submitButtonActionPerformed(evt);
-            }
-        });
+		cancelButton.setText("Cancel");
+		cancelButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				cancelButtonActionPerformed(evt);
+			}
+		});
 
-        serverLabel.setText("Server: ");
+		submitButton.setText("Submit");
+		submitButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				submitButtonActionPerformed(evt);
+			}
+		});
 
-        serverText.setText("http://localhost:8080/alfresco");
+		serverLabel.setText("Server: ");
 
-        projectLabel.setText("Project: ");
+		serverText.setText("http://localhost:8080/alfresco");
 
-        Label2.setText("User Credentials");
+		projectLabel.setText("Project: ");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(submitButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelButton))
-                    .addComponent(separator)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(serverLabel)
-                            .addComponent(projectLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(serverText)
-                            .addComponent(projectText)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Label)
-                            .addComponent(Label2))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(passwordLabel)
-                            .addComponent(usernameLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(usernameText)
-                            .addComponent(passwordText, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Label)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(serverLabel)
-                    .addComponent(serverText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(projectLabel)
-                    .addComponent(projectText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Label2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usernameLabel)
-                    .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordLabel)
-                    .addComponent(passwordText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelButton)
-                    .addComponent(submitButton))
-                .addContainerGap())
-        );
+		Label2.setText("User Credentials");
+
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+										.addGap(0, 0, Short.MAX_VALUE)
+										.addComponent(submitButton)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(cancelButton))
+										.addComponent(separator)
+										.addGroup(layout.createSequentialGroup()
+												.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+														.addComponent(serverLabel)
+														.addComponent(projectLabel))
+														.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+														.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+																.addComponent(serverText)
+																.addComponent(projectText)))
+																.addGroup(layout.createSequentialGroup()
+																		.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+																				.addComponent(Label)
+																				.addComponent(Label2))
+																				.addGap(0, 0, Short.MAX_VALUE))
+																				.addGroup(layout.createSequentialGroup()
+																						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+																								.addComponent(passwordLabel)
+																								.addComponent(usernameLabel))
+																								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+																										.addComponent(usernameText)
+																										.addComponent(passwordText, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))))
+																										.addContainerGap())
+				);
+		layout.setVerticalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(Label)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(serverLabel)
+								.addComponent(serverText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+										.addComponent(projectLabel)
+										.addComponent(projectText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(Label2)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(usernameLabel)
+												.addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+														.addComponent(passwordLabel)
+														.addComponent(passwordText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+														.addGap(18, 18, 18)
+														.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+																.addComponent(cancelButton)
+																.addComponent(submitButton))
+																.addContainerGap())
+				);
 		pack();
 		setLocationRelativeTo(null);
 	}// </editor-fold>
@@ -511,14 +511,36 @@ public class AlfrescoClient extends javax.swing.JFrame {
 
 		} catch (IOException e) {
 			throw new RuntimeException(e);
-
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Error: Node Already Exists");
+			return null;
 		} finally {
 			getMethod.releaseConnection();
 		} 
+	}
 
-		return null;
+	public boolean exists(String path){
+		try{
+			StringBuilder url = getAPIWebScriptUrl();
+
+			appendPaths(url, "path");
+			appendPaths(url, "Workspace");
+			appendPaths(url, "SpacesStore");
+			appendPaths(url, "company_home");
+			appendPaths(url, path);
+
+			GetMethod getMethod = new GetMethod();
+			String encodedUrl = encode(url);
+			String charset = getMethod.getParams().getUriCharset();
+			URI uri = new URI(encodedUrl, true, charset);
+
+			getMethod.setURI(uri);
+			executeMethod(getMethod);
+			System.out.println(getMethod.getResponseBodyAsString());
+			return true;
+		}catch (Exception e) {
+			return false;
+		}
 	}
 
 	/**
@@ -589,11 +611,11 @@ public class AlfrescoClient extends javax.swing.JFrame {
 
 		try {
 			AlfrescoClient tester = new AlfrescoClient();
-			tester.setBaseUrl("http://localhost:8080/alfresco");
+			tester.setBaseUrl(server);
 			loggedIn = tester.setAuthentication(username, password);
 
 			if(inst != null)
-				inst.setCredentials(username, password, tester.getBaseUrl());	//derivA Method
+				inst.setCredentials(username, password, tester.getBaseUrl(), project);	//derivA Method
 
 			if(loggedIn)
 				setVisible(false);
@@ -616,12 +638,6 @@ public class AlfrescoClient extends javax.swing.JFrame {
 	}
 
 	public static void main(String[] args) {
-
-		AlfrescoClient ac = new AlfrescoClient();
-		File file = new File("D:\\GARZA\\Documents\\Master's Thesis\\Lit Review\\Trust Judgment i Knowledge Provenance - Huang, Fox.pdf");
-		ac.logIn("admin", "admin", "http://localhost:8080/alfresco");
-		String URI = ac.uploadFile("ProjectY", file);
-		System.out.println("URI: " + URI);
 
 
 		//		try{
