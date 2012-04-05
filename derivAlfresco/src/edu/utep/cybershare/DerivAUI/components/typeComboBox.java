@@ -40,11 +40,9 @@ public class typeComboBox extends IndividualComboBox {
 			queryAgents();
 	}
 
-	public typeComboBox(boolean bol, AlfrescoClient ac) {
+	public typeComboBox(AlfrescoClient ac) {
 		super();
 		aClient = ac;
-		if(bol)
-			queryAgents();
 	}
 
 	public static String stripURI(String formatURI)

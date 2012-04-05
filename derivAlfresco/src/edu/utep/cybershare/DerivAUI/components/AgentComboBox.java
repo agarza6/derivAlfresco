@@ -40,7 +40,6 @@ public class AgentComboBox extends IndividualComboBox {
 	public AgentComboBox(AlfrescoClient ac) {
 		super();
 		aClient = ac;
-		queryAgents();
 	}
 	
 	public static String stripURI(String formatURI)
@@ -54,14 +53,14 @@ public class AgentComboBox extends IndividualComboBox {
 	public void queryAgents() {
 		Vector<Individual> individuals = new Vector<Individual>();
 
-		String query = "SELECT ?inferenceEngine WHERE {?inferenceEngine a <http://inference-web.org/2.0/pml-provenance.owl#InferenceEngine> .}";
+		String query = "SELECT ?inferenceEngine WHERE {?inferenceEngine a <http://inference-web.org/2.0/pml-provenance.owl#Agent> .}";
 
 		String agents = aClient.executeQuery(query);
 		
 		ResultSet results = ResultSetFactory.fromXML(agents);
 		
-//		System.out.println(agents);
-//		System.out.println(results);
+		System.out.println(agents);
+		System.out.println(results);
 		
 		String format;
 

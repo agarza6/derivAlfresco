@@ -168,8 +168,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 	/** Creates new form DerivAGUI */
 	public DerivAUI() {
-		initComponents();
 		serverLogin();
+		
 //		initTripleStoreComponents();
 	}
 
@@ -194,14 +194,14 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 
 		conclusionList = new IndividualList();
-		conclusionFormatComboBox = new formatComboBox(false);
-		conclusionTypeComboBox = new typeComboBox(false);
-		agentComboBox = new AgentComboBox(false);
-		inferenceRuleComboBox = new InferenceRulesComboBox(false);
 		antecedentList = new IndividualList();
 		SourcesList = new IndividualList();
 		currentlySelectedSourcesList = new IndividualList();
 		currentlySelectedAntecedentList = new IndividualList();
+		conclusionFormatComboBox = new formatComboBox(aClient);
+		conclusionTypeComboBox = new typeComboBox(aClient);
+		agentComboBox = new AgentComboBox(aClient);
+		inferenceRuleComboBox = new InferenceRulesComboBox(aClient);
 
 		mainPanel = new javax.swing.JPanel();
 		ServerLabel = new javax.swing.JLabel();
@@ -850,7 +850,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				addAgentToolAction(evt);
 			}
 		});
-		ToolsMenu.add(addAgentTool).setEnabled(false);
+		ToolsMenu.add(addAgentTool);
 
 		jMenuBar1.add(ToolsMenu);
 
@@ -974,7 +974,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			if(CurrentlySelectedAntecedentsVector != null)
 				CurrentlySelectedAntecedentsVector.clear();
 			if(General_PMLJ_Nodes == null)
-				General_PMLJ_Nodes = new PMLJList("ALL_PROJECTS_$!!$!").getPMLList();
+				General_PMLJ_Nodes = new PMLJList("ALL_PROJECTS_$!!$!", aClient).getPMLList();
 			antecedentList.setModel(General_PMLJ_Nodes);		
 			antecedentList.repaint();
 		}else{
@@ -985,7 +985,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	public void refreshAntecedentUI(){
 		if(CurrentlySelectedAntecedentsVector != null)
 			CurrentlySelectedAntecedentsVector.clear();
-		Project_PMLJ_Nodes = new PMLJList(selectedProjectSTR).getPMLList();
+		Project_PMLJ_Nodes = new PMLJList(selectedProjectSTR, aClient).getPMLList();
 
 		if(MODE == DOC_DERIVATE_MODE)
 			conclusionList.setModel(Project_PMLJ_Nodes);
@@ -1002,6 +1002,11 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		SourcesList.repaint();
 	}
 
+	public void refreshInferenceAgentUI(){
+		agentComboBox.queryAgents();
+		agentComboBox.repaint();
+	}
+	
 	public void filterByWDO(){
 
 		System.out.println("filtering by: " + selectedOntologySTR);
@@ -1020,7 +1025,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		waiting = new Cursor(Cursor.WAIT_CURSOR);
 		setCursor(waiting);
 
-		AssertionMaker AM = new AssertionMaker();
+		AssertionMaker AM = new AssertionMaker(aClient);
 		AM.setUseSessionUser(IncludeUserCheckBox.isSelected());
 		AM.setSources(CurrentlySelectedSourcesVector);
 
@@ -1053,21 +1058,23 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	public void closeAction(java.awt.event.ActionEvent evt){
 		System.exit(0);
 	}
+	
 
 	public void addSourceToolAction(java.awt.event.ActionEvent evt){
 		if(AST == null){
-			AST = new AddSourceTool(instance, selectedServerSTR, selectedProjectSTR, aClient);
+			AST = new AddSourceTool(instance, selectedProjectSTR, aClient);
 		}
 		AST.setVisible(true);
 	}
 
 	public void addAgentToolAction(java.awt.event.ActionEvent evt){
-		setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		if(AAT == null){
-			AAT = new AddAgentTool(selectedServerSTR, selectedProjectSTR, username, password);
+			if(aClient == null)
+				AAT = new AddAgentTool(instance, selectedServerSTR, selectedProjectSTR, username, password);
+			else
+				AAT = new AddAgentTool(instance, selectedProjectSTR, aClient);
 		}
 		AAT.setVisible(true);
-		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void aggregateToolAction(java.awt.event.ActionEvent evt){
@@ -1139,7 +1146,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		waiting = new Cursor(Cursor.WAIT_CURSOR);
 		setCursor(waiting);
 
-		DerivationMaker DM = new DerivationMaker();
+		DerivationMaker DM = new DerivationMaker(aClient);
 
 		//set conclusion information
 		DM.setFile(oFile);
@@ -1206,7 +1213,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		} while(!aClient.isLoggedIn() && intents < 3);
 		
 		if(intents < 3){
-			JOptionPane.showMessageDialog(null, "Too many fails, derivA will close now.");
+			JOptionPane.showMessageDialog(null, "Too many failed login attempts, derivA will close now.");
 			System.exit(0);
 		}
 		
@@ -1215,12 +1222,15 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	}
 	
 	public void setCredentials(String UN, String PS, String server, String project){
+		initComponents();
+		
 		username = UN;
 		password = PS;
 		selectedServerSTR = server;
+		selectedServerLabel.setText(server);
 		selectedProjectSTR = project;
-		System.out.println(username + " - " + password);
-		System.out.println(selectedServerSTR);
+		selectedProjectLabel.setText(project);
+		
 		initTripleStoreComponents();
 	}
 	
@@ -1266,35 +1276,31 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		@Override
 		public Void doInBackground() {
 
-			System.out.println("Loading Sources");
 			ProgressBar.setString("Loading Sources");
 			SourcesPML_Nodes = new SourcesList(aClient).getSourceList();
 			SourcesList.setModel(SourcesPML_Nodes);
 			setProgress(15);
 
-			System.out.println("Loading Formats");
 			ProgressBar.setString("Loading Data Formats");
 			conclusionFormatComboBox.queryFormats();
-			System.out.println("Loading Types");
+			setProgress(25);
+			
 			ProgressBar.setString("Loading Data Types");
-			setProgress(35);
-
 			conclusionTypeComboBox.queryAgents();
-			System.out.println("Loading Agent");
+			setProgress(35);
+			
 			ProgressBar.setString("Loading Inference Agents");
+			agentComboBox.queryAgents();
 			setProgress(50);
 
-			agentComboBox.queryAgents();
-			System.out.println("Loading Rules");
 			ProgressBar.setString("Loading Inference Rules");
+			inferenceRuleComboBox.queryAgents();
 			setProgress(65);
 
-			inferenceRuleComboBox.queryAgents();
-			System.out.println("Loading Antecedents");
 			ProgressBar.setString("Loading Antecedents");
 			setProgress(79);
 
-			Project_PMLJ_Nodes = new PMLJList(selectedProjectSTR).getPMLList();
+			Project_PMLJ_Nodes = new PMLJList(selectedProjectSTR, aClient).getPMLList();
 			antecedentList.setModel(Project_PMLJ_Nodes);
 			ProgressBar.setString("Loading Conclusions");
 			setProgress(89);

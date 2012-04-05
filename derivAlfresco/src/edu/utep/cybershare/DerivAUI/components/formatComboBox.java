@@ -41,7 +41,6 @@ public class formatComboBox extends IndividualComboBox {
 	public formatComboBox(AlfrescoClient ac) {
 		super();
 		aClient = ac;
-		queryFormats();
 	}
 	
 	public formatComboBox(String ont) {
@@ -61,7 +60,7 @@ public class formatComboBox extends IndividualComboBox {
 
 	public void queryFormats() {
 		Vector<Individual> individuals = new Vector<Individual>();
-		
+
 		String query = "SELECT ?format WHERE {?format a <http://inference-web.org/2.0/pml-provenance.owl#Format> .}";
 
 		String formats = aClient.executeQuery(query);

@@ -29,6 +29,7 @@ import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
 
 public class DerivationMaker {
 	
+	private AlfrescoClient aClient;
 	private String password, username;
 	private String project;
 	private String serverPath;
@@ -52,6 +53,9 @@ public class DerivationMaker {
 	public void setAntecedentURIs(Vector<Individual> URIs){antecedentURIs = URIs;}
 	public void setFile(File f){file = f;}
 	
+	public DerivationMaker(AlfrescoClient ac){
+		aClient = ac;
+	}
 	
 	public String getDateTime() {
 		Calendar cal = Calendar.getInstance();
@@ -61,11 +65,10 @@ public class DerivationMaker {
 	
 	public void generateDerivation(){
 		
-		AlfrescoClient ac = new AlfrescoClient(username, password, serverPath);
-		NodeSetBuilder NSB = new NodeSetBuilder(ac);
+		NodeSetBuilder NSB = new NodeSetBuilder(aClient);
 
 		String dataFileName = file.getName();
-		conclusionURI = ac.uploadFile(project, file);
+		conclusionURI = aClient.uploadFile(project, file);
 		
 		try {
 			
@@ -84,7 +87,8 @@ public class DerivationMaker {
 		NSB.fileName = dataFileName;
 		String pmljURI = NSB.derivateArtifact();
 		
-		//aggregate pmljURI to triple Store
+		//Aggregate to a Triple Store HERE
+		aClient.crawlProject(project);
 	}
 	
 }

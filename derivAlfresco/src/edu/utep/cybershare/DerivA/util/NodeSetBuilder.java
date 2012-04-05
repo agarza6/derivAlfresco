@@ -95,6 +95,7 @@ public class NodeSetBuilder {
 
 		//Set Information Instance (type)
 		//		wtr.setInformationByClass(docTypeURI);
+		System.out.println("docTypeURI: " + docTypeURI);
 		wtr.setInformation(docTypeURI);
 
 		//Set Time
@@ -102,6 +103,8 @@ public class NodeSetBuilder {
 		wtr.setTimestamp(time);
 
 		//Set Conclusion
+		System.out.println("artifactURI: " + artifactURI);
+		System.out.println("formatURI: " + formatURI);
 		wtr.setConclusionAsURL(artifactURI, formatURI);
 
 		//Set Rule
@@ -164,8 +167,11 @@ public class NodeSetBuilder {
 		return writePMLToServer(wtr);
 	}
 
-	public String createAgent(String id, String agentName,String description, String URL){
+	public String createAgent(String id, String agentName, String description, String URL){
 
+		id.replaceAll("(\\r|\\n)", "");
+		URL.replaceAll("(\\r|\\n)", "");
+		
 		IWAgent agent = (IWAgent)PMLObjectManager.createPMLObject(PMLP.Agent_lname);
 
 		agent.setIdentifier(PMLObjectManager.getObjectID(id));
@@ -188,8 +194,6 @@ public class NodeSetBuilder {
 		String AgentString = PMLObjectManager.printPMLObjectToString(agent);
 		return AgentString;
 
-
-
 		//		PMLObjectManager.savePMLObject(agent, "c:/agent.owl");
 
 	}
@@ -209,8 +213,11 @@ public class NodeSetBuilder {
 			aClient = new AlfrescoClient();
 			aClient.logIn(username, password, ServerURL);
 		}
+		
+		
 		String node_pml_url = aClient.createNode(projectName, tempFileName);
-
+		
+		
 		// Create temp file to write PML
 		try{
 			FileWriter fstream = new FileWriter(tempFileName);
@@ -222,7 +229,7 @@ public class NodeSetBuilder {
 
 		//setNewBaseURL and Write PML
 		String base = node_pml_url.substring(0,node_pml_url.lastIndexOf('/'));
-		wtr.setBaseURL(ServerURL + base);
+		wtr.setBaseURL(aClient.getBaseUrl() + base);
 		String resultURI2 = wtr.writePML();
 
 		//Create temp file with Provenance to upload
@@ -230,7 +237,7 @@ public class NodeSetBuilder {
 		pmlFile.deleteOnExit();
 
 		//Update dummy BaseURL with new real Alfresco URL
-		updatePMLReference(pmlFile, "http://EMPTYSPACETOREPLACE", ServerURL + base);
+		updatePMLReference(pmlFile, "http://EMPTYSPACETOREPLACE", aClient.getBaseUrl() + base);
 
 		aClient.addContentToNode(node_pml_url, pmlFile);
 

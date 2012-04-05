@@ -32,9 +32,9 @@ public class PMLJList extends IndividualList {
 	private Vector<Individual> individuals;
 	private AlfrescoClient aClient;
 
-	public PMLJList(String project){
-		queryPMLJ(project);
-	}
+//	public PMLJList(String project){
+//		queryPMLJ(project);
+//	}
 
 	public PMLJList(String project, AlfrescoClient ac){
 		aClient = ac;
@@ -43,7 +43,7 @@ public class PMLJList extends IndividualList {
 
 	private void queryPMLJ(String project){
 		individuals = new Vector<Individual>();
-
+		project = "ALL_PROJECTS_$!!$!";
 
 		String pml_j, query = "";
 		if(project.equalsIgnoreCase("ALL_PROJECTS_$!!$!")){
@@ -55,14 +55,14 @@ public class PMLJList extends IndividualList {
 			query = "SELECT ?nodeset ?conclusionURL WHERE {?nodeset a <http://inference-web.org/2.0/pml-justification.owl#NodeSet> . " +
 					"?nodeset <http://inference-web.org/2.0/pml-justification.owl#hasConclusion> ?conclusion . " +
 					"?conclusion <http://inference-web.org/2.0/pml-provenance.owl#hasURL> ?conclusionURL . " +
-					"FILTER regex(str(?nodeset), \".*${project}.*\",\"i\") .}";
+					"FILTER regex(str(?nodeset), \".*" + project + ".*\",\"i\") .}";
 		}
 
 		pml_j = aClient.executeQuery(query);
 		ResultSet results = ResultSetFactory.fromXML(pml_j);
 
-		System.out.println(pml_j);
-		System.out.println(results);
+//		System.out.println(pml_j);
+//		System.out.println(results);
 
 		String conclusionName = "";
 		String conclusionURI = "";

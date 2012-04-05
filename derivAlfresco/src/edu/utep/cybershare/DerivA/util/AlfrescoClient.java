@@ -507,22 +507,35 @@ public class AlfrescoClient extends javax.swing.JFrame {
 
 			executeMethod(getMethod);
 
+			System.out.println(getMethod.getResponseBodyAsString());
 			return getMethod.getResponseBodyAsString();
 
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} catch (Exception e) {
 			System.out.println("Error: Node Already Exists");
-			return null;
+			return "/d/a/workspace/SpacesStore/" + getObjectUuid("Projects/" + project + "/" + filename) + "/" + filename;
 		} finally {
 			getMethod.releaseConnection();
 		} 
 	}
 
-	public boolean exists(String path){
+	public String getObjectUuid(String path){
+		String atomXml = getObject(path);
+		//find the <id> tag, should be only one
+		String idTag = atomXml.substring(atomXml.indexOf("<id>") + "<id>".length(), atomXml.indexOf("</id>"));
+		//this UUID is everything after the last colon:
+		return idTag.substring(idTag.lastIndexOf(":") + ":".length());
+	}
+
+	public String getObject(String path){
+		//we're using this alfresco webscript - but it returns an atom feed xml document, so it will need to be parsed
+		//GET /api/path/{store_type}/{store_id}/{nodepath}?filter={filter?}&returnVersion={returnVersion?}
+		//&includeAllowableActions={includeAllowableActions?}&includeRelationships={includeRelationships?}
+		//&includeACL={includeACL?}&renditionFilter={renditionFilter?}
+
 		try{
 			StringBuilder url = getAPIWebScriptUrl();
-
 			appendPaths(url, "path");
 			appendPaths(url, "Workspace");
 			appendPaths(url, "SpacesStore");
@@ -536,10 +549,9 @@ public class AlfrescoClient extends javax.swing.JFrame {
 
 			getMethod.setURI(uri);
 			executeMethod(getMethod);
-			System.out.println(getMethod.getResponseBodyAsString());
-			return true;
+			return getMethod.getResponseBodyAsString();
 		}catch (Exception e) {
-			return false;
+			return "";
 		}
 	}
 
@@ -639,7 +651,10 @@ public class AlfrescoClient extends javax.swing.JFrame {
 
 	public static void main(String[] args) {
 
-
+		AlfrescoClient ac = new AlfrescoClient();
+		ac.logIn("admin", "admin", "http://localhost:8080/alfresco");
+		System.out.println(ac.getObjectUuid("Projects/ProjectX/Garza_Antonio.owl"));
+		
 		//		try{
 		//			// Create file 
 		//			FileWriter fstream = new FileWriter("temp");
@@ -672,7 +687,34 @@ public class AlfrescoClient extends javax.swing.JFrame {
 		//		AC.addContentToNode(aNodeURI[5], file);	//aNodeURI[5] == uuid
 
 	}
+ 
+	public void crawlProject(String project){
+		
+		String uuid = getObjectUuid("Projects/" + project);
+		
+		StringBuilder url = getDerivAWebScriptUrl();
+		appendPaths(url, "dropcreatetdbmodel");
+		appendParameter(url, "rootUuid", uuid);
+		GetMethod getMethod = new GetMethod();
+		
+		try{
+			String encodedUrl = encode(url);
+			String charset = getMethod.getParams().getUriCharset();
+			URI uri = new URI(encodedUrl, true, charset);
+			
+			getMethod.setURI(uri);
+			executeMethod(getMethod);
+		}catch (IOException e) {
+			throw new RuntimeException(e);
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			getMethod.releaseConnection();
+		}
+		
+	}
+	
 	public String executeQuery(String query){
 
 		StringBuilder url = getDerivAWebScriptUrl();

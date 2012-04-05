@@ -43,11 +43,9 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 			queryAgents();
 	}
 
-	public InferenceRulesComboBox(boolean bol, AlfrescoClient ac) {
+	public InferenceRulesComboBox(AlfrescoClient ac) {
 		super();
 		aClient = ac;
-		if(bol)
-			queryAgents();
 	}
 
 	public static String stripURI(String formatURI)
@@ -86,8 +84,6 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 		rules = aClient.executeQuery(query);
 		ResultSet results = ResultSetFactory.fromXML(rules);
 
-		//		System.out.println(rules);
-
 		String rule, IRClass, IRName;
 
 		individuals.add(new Individual("Choose Inference Rule", " -- Choose Inference Rule -- ", "Choose Inference Rule"));
@@ -101,12 +97,10 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 				rule = QS.get("?inferenceRule").toString();
 				IRName = QS.get("?ruleLabel").toString();
 				IRClass = QS.get("?ruleClass").toString();
-				//				String prettyName = IRClass.substring(IRClass.lastIndexOf('#') + 1) + " : " + IRName;
+				
 				String prettyName = IRName;
 
-				//				System.out.println(prettyName);
-
-				if(IRClass.substring(IRClass.lastIndexOf('#') + 1).equalsIgnoreCase("resource")){
+				if(!IRClass.substring(IRClass.lastIndexOf('/') + 1).equalsIgnoreCase("rdf-schema#Class")){
 					rule = null;
 				}
 

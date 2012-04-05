@@ -30,6 +30,7 @@ import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
 
 public class AssertionMaker {
 
+	AlfrescoClient aClient;
 	private String dataFilePath;
 	private File file;
 
@@ -47,6 +48,10 @@ public class AssertionMaker {
 
 	private static final String DATE_FORMAT_NOW = "YYYY-MM-DDTHH:MM:SSZ";
 
+	public AssertionMaker(AlfrescoClient ac){
+		aClient = ac;
+	}
+	
 	public void setDataFilePath(String path){dataFilePath = path;}
 	public void setDataFilePath(String path, boolean from){dataFilePath = path; conclusionFromURL = from;}
 	public void setArtifactURI(String uri){conclusionURI = uri;}
@@ -87,14 +92,13 @@ public class AssertionMaker {
 
 	public void generateAcertation(){
 
-		AlfrescoClient ac = new AlfrescoClient(username, password, serverPath);
-		NodeSetBuilder NSB = new NodeSetBuilder(ac);
+		NodeSetBuilder NSB = new NodeSetBuilder(aClient);
 
 		String dataFileName = "";
 	
 		if(!conclusionFromURL){
 			dataFileName = file.getName();
-			conclusionURI = ac.uploadFile(project, file);
+			conclusionURI = aClient.uploadFile(project, file);
 			
 		}else{
 			conclusionURI = dataFilePath;
@@ -114,6 +118,7 @@ public class AssertionMaker {
 			
 			dataFileName = URLEncoder.encode(dataFileName, "UTF-8");
 			NSB.projectName = project;
+			
 			NSB.artifactURI = conclusionURI;
 			NSB.docTypeURI = docTypeURI;
 			NSB.formatURI = formatURI;
@@ -128,6 +133,7 @@ public class AssertionMaker {
 		pmljURI = NSB.assertArtifact();
 
 		//Aggregate to a Triple Store HERE
-
+		aClient.crawlProject(project);
+		
 	}
 }

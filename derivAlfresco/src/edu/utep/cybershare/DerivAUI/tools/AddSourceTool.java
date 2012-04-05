@@ -21,6 +21,9 @@ import javax.swing.*;
 
 import edu.utep.cybershare.DerivA.util.AlfrescoClient;
 import edu.utep.cybershare.DerivAUI.DerivAUI;
+import edu.utep.cybershare.DerivAUI.components.IndividualList;
+import edu.utep.cybershare.DerivAUI.components.SourcesList;
+import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
 
 import java.awt.Cursor;
 import java.io.BufferedWriter;
@@ -29,6 +32,8 @@ import java.io.FileWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
+import java.util.Vector;
 
 @SuppressWarnings("serial")
 public class AddSourceTool extends JFrame {
@@ -83,24 +88,26 @@ public class AddSourceTool extends JFrame {
 	private javax.swing.JButton removeButton;
 	private javax.swing.JButton submitButton;
 
-	private javax.swing.JList jList1;
-	private javax.swing.JList jList2;
+	private IndividualList availPeopleList;
+	private IndividualList peopleIKnowList;
 	private javax.swing.JTabbedPane jTabbedPane1;
-	private javax.swing.JScrollPane availPeopleList;
-	private javax.swing.JScrollPane peopleIKnowList;
+	private javax.swing.JScrollPane availPeoplePane;
+	private javax.swing.JScrollPane peopleIKnowPane;
+
+	private Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual> availPeopleVector;
+	private Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual> peopleIKnowVector;
 
 	//Model variables
 	private String shortName, fullName, URL, project, lname, fname;
-//	private String uploaderName, uploaderPass, server;
+	//	private String uploaderName, uploaderPass, server;
 	private String email, title, depiction, phone, homepage, workpage, projectpage, schoolpage, sha1Sum;
 	static String pmlp_url, OrgURL, memberOfURI,memberOfName;
 
 	// End of variables declaration
 
 	/** Creates new form addSourceTool */
-	public AddSourceTool(DerivAUI inst, String tURL, String proj, AlfrescoClient ac) {
+	public AddSourceTool(DerivAUI inst, String proj, AlfrescoClient ac) {
 		instance = inst;		
-		URL = tURL;
 		aClient = ac;
 		project = proj;
 		initComponents();
@@ -137,12 +144,12 @@ public class AddSourceTool extends JFrame {
 		FriendsIKnowPane = new javax.swing.JPanel();
 		FoafMainLabel = new javax.swing.JLabel();
 		AvailPeopleLabel = new javax.swing.JLabel();
-		availPeopleList = new javax.swing.JScrollPane();
-		jList1 = new javax.swing.JList();
+		availPeoplePane = new javax.swing.JScrollPane();
+		availPeopleList = new IndividualList();
 		addButton = new javax.swing.JButton();
 		removeButton = new javax.swing.JButton();
-		peopleIKnowList = new javax.swing.JScrollPane();
-		jList2 = new javax.swing.JList();
+		peopleIKnowPane = new javax.swing.JScrollPane();
+		peopleIKnowList = new IndividualList();
 		peopleIKnowLabel = new javax.swing.JLabel();
 		someoneElseLabel = new javax.swing.JLabel();
 		someoneElseNameLabel = new javax.swing.JLabel();
@@ -154,6 +161,9 @@ public class AddSourceTool extends JFrame {
 		addSomeoneElse = new javax.swing.JButton();
 		submitButton = new javax.swing.JButton();
 		cancelButton = new javax.swing.JButton();
+	
+		availPeopleVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
+		peopleIKnowVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
 
 		newSouceLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 		newSouceLabel.setText("Add New Source: Person");
@@ -170,7 +180,6 @@ public class AddSourceTool extends JFrame {
 
 		FOAFCheckBox.setText("Create FOAF (Friend of a Friend)");
 		FOAFCheckBox.setSelected(false);
-		FOAFCheckBox.setEnabled(false);
 
 		emailLabel.setText("e-mail:");
 
@@ -320,37 +329,44 @@ public class AddSourceTool extends JFrame {
 
 		AvailPeopleLabel.setText("Available People");
 
-		jList1.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-			public int getSize() { return strings.length; }
-			public Object getElementAt(int i) { return strings[i]; }
+		availPeoplePane.setViewportView(availPeopleList);
+		availPeopleVector = new SourcesList(aClient).getSourceList();
+		availPeopleList.setModel(availPeopleVector);
+
+		peopleIKnowPane.setViewportView(peopleIKnowList);
+
+		addButton.setFont(new java.awt.Font("Tahoma", 1, 14));
+		addButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("../images/001_01.gif"))); // NOI18N
+		addButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				addAction(evt);
+			}
 		});
 
-		availPeopleList.setViewportView(jList1);
-
-		addButton.setText("Add");
-
-		removeButton.setText("Re");
-
-		jList2.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-			public int getSize() { return strings.length; }
-			public Object getElementAt(int i) { return strings[i]; }
+		removeButton.setFont(new java.awt.Font("Tahoma", 1, 14));
+		removeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("../images/001_02.gif"))); // NOI18N
+		removeButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				removeAction(evt);
+			}
 		});
-		peopleIKnowList.setViewportView(jList2);
 
+		peopleIKnowPane.setViewportView(peopleIKnowList);
 		peopleIKnowLabel.setText("People You Know");
-
+		
 		someoneElseLabel.setText("Add Someone You Know");
-
 		someoneElseNameLabel.setText("Name:");
-
 		someoneElseEmailLabel.setText("Email:");
-
+		someoneElseEmailTF.setEnabled(false);
 		someoneElseURLLabel.setText("FOAF URL:");
-
+		
 		addSomeoneElse.setText("Add");
-
+		addSomeoneElse.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				addSomeoneElseAction(evt);
+			}
+		});
+		
 		javax.swing.GroupLayout FriendsIKnowPaneLayout = new javax.swing.GroupLayout(FriendsIKnowPane);
 		FriendsIKnowPane.setLayout(FriendsIKnowPaneLayout);
 		FriendsIKnowPaneLayout.setHorizontalGroup(
@@ -363,7 +379,7 @@ public class AddSourceTool extends JFrame {
 												.addGroup(FriendsIKnowPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
 														.addComponent(FoafMainLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 														.addComponent(AvailPeopleLabel, javax.swing.GroupLayout.Alignment.LEADING))
-														.addComponent(availPeopleList, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+														.addComponent(availPeoplePane, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
 														.addGap(10, 10, 10)
 														.addGroup(FriendsIKnowPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 																.addComponent(addButton)
@@ -371,7 +387,7 @@ public class AddSourceTool extends JFrame {
 																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 																.addGroup(FriendsIKnowPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 																		.addComponent(peopleIKnowLabel)
-																		.addComponent(peopleIKnowList, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
+																		.addComponent(peopleIKnowPane, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
 																		.addComponent(someoneElseLabel)
 																		.addGroup(FriendsIKnowPaneLayout.createSequentialGroup()
 																				.addComponent(someoneElseNameLabel)
@@ -398,7 +414,7 @@ public class AddSourceTool extends JFrame {
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 										.addComponent(AvailPeopleLabel)
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(availPeopleList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addComponent(availPeoplePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGroup(javax.swing.GroupLayout.Alignment.LEADING, FriendsIKnowPaneLayout.createSequentialGroup()
 												.addGap(36, 36, 36)
 												.addComponent(peopleIKnowLabel)
@@ -408,7 +424,7 @@ public class AddSourceTool extends JFrame {
 																.addComponent(addButton)
 																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 																.addComponent(removeButton))
-																.addComponent(peopleIKnowList, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))))
+																.addComponent(peopleIKnowPane, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))))
 																.addGap(18, 18, 18)
 																.addComponent(someoneElseLabel)
 																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -465,6 +481,49 @@ public class AddSourceTool extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
+	public void addAction(java.awt.event.ActionEvent evt){
+		Object CSA = availPeopleList.getSelectedValue();
+		if(peopleIKnowVector != null){
+			if(!peopleIKnowVector.contains(CSA)){
+				peopleIKnowVector.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSA);
+			}
+		}else{
+			peopleIKnowVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
+			peopleIKnowVector.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSA);
+		}
+
+		peopleIKnowList.setModel(peopleIKnowVector);
+		peopleIKnowList.repaint();
+
+	}
+
+	public void addSomeoneElseAction(java.awt.event.ActionEvent evt){
+		Individual someoneElse = peopleIKnowList.new Individual(someoneElseURLTF.getText(),someoneElseNameTF.getText(),someoneElseURLTF.getText());
+		if(peopleIKnowVector != null){
+				peopleIKnowVector.add(someoneElse);
+		}else{
+			peopleIKnowVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
+			peopleIKnowVector.add(someoneElse);
+		}
+
+		someoneElseURLTF.setText("");
+		someoneElseNameTF.setText("");
+		peopleIKnowList.setModel(peopleIKnowVector);
+		peopleIKnowList.repaint();
+
+	}
+	
+	public void removeAction(java.awt.event.ActionEvent evt){
+		Object CSA = peopleIKnowList.getSelectedValue();
+		if(peopleIKnowVector != null){
+			if(peopleIKnowVector.contains(CSA)){
+				peopleIKnowVector.remove(CSA);
+			}
+		}
+		peopleIKnowList.setModel(peopleIKnowVector);
+		peopleIKnowList.repaint();
+	}
+
 	public void submitAction(java.awt.event.ActionEvent evt){
 
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -480,15 +539,15 @@ public class AddSourceTool extends JFrame {
 
 		String pmlP = "";
 
-//		aClient = new AlfrescoClient();
-//		aClient.logIn(uploaderName, uploaderPass, server);
+		//		aClient = new AlfrescoClient();
+		//		aClient.logIn(uploaderName, uploaderPass, server);
 		String node_pmlp_url = aClient.createNode(project, shortName + ".owl");
 
-		//if(FOAFCheckBox.isSelected()){
-		pmlP = getPML(aClient.getBaseUrl() + node_pmlp_url);
-		//}else{
-		//	pmlP = getPML_FOAF();
-		//}
+		if(!FOAFCheckBox.isSelected()){
+			pmlP = getPML(aClient.getBaseUrl() + node_pmlp_url);
+		}else{
+			pmlP = getPML_FOAF(aClient.getBaseUrl() + node_pmlp_url);
+		}
 
 		try{
 			// Create temp file with content to add to the node.
@@ -506,6 +565,9 @@ public class AddSourceTool extends JFrame {
 
 		aClient.addContentToNode(node_pmlp_url, file);
 
+		//Aggregate to a Triple Store HERE
+		aClient.crawlProject(project);
+		
 		instance.refreshSourcesUI();
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
@@ -534,7 +596,10 @@ public class AddSourceTool extends JFrame {
 		return pmlP;
 	}
 
-	private String getPML_FOAF(){
+	private String getPML_FOAF(String pmlp_url){
+
+		String pmlp_uri = pmlp_url.trim() + "#" + shortName;
+		pmlp_uri.replaceAll("(\\r|\\n)", "");
 
 		email = emailTF.getText();
 		depiction = ImageLinkTF.getText();
@@ -554,14 +619,14 @@ public class AddSourceTool extends JFrame {
 		pml_foaf += '\t' + "xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"" + '\n';
 		pml_foaf += '\t' + "xmlns:admin=\"http://webns.net/mvcb/\">" + '\n';
 		//Foaf/PML declarations
-		pml_foaf += '\t' + "<foaf:Person rdf:about=\"" + pmlp_url.trim() + "#" + shortName + "\">" + '\n';
+		pml_foaf += '\t' + "<foaf:Person rdf:about=\"" + pmlp_uri + "\">" + '\n';
 		pml_foaf += "\t\t" + "<rdf:type rdf:resource=\"http://inference-web.org/2.0/pml-provenance.owl#Person\"/>" + '\n';
 		pml_foaf += "\t\t" + "<foaf:primaryTopic rdf:resource=\"#me\"/>" + '\n';
 		pml_foaf += "\t\t" + "<admin:generatorAgent rdf:resource=\"http://trust.cs.utep.edu/derivA/\"/>" + '\n';
 		pml_foaf += "\t\t" + "<admin:errorReportsTo rdf:resource=\"mailto:agarza6@miners.utep.edu\"/>" + '\n';
 		//PML Info
 		pml_foaf += "\t\t" + "<pmlp:hasName rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">" + fullName + "</pmlp:hasName>" + '\n';
-		if(!memberOfURI.isEmpty() && memberOfURI != null)
+		if(memberOfURI != null && !memberOfURI.isEmpty())
 			pml_foaf += "\t\t" + "<pmlp:isMemberOf rdf:resource=\"" + memberOfURI + "\"/>" + '\n';
 
 		//FOAF Info
@@ -578,24 +643,35 @@ public class AddSourceTool extends JFrame {
 
 		pml_foaf += "\t\t" + "<foaf:name>" + fullName + "</foaf:name>" + '\n';
 
-		if(!title.isEmpty() && title != null)
+		if(title != null && !title.isEmpty())
 			pml_foaf += "\t\t" + "<foaf:title>" + title + "</foaf:title>" + '\n';
 		pml_foaf += "\t\t" + "<foaf:mbox_sha1sum>" + sha1Sum + "</foaf:mbox_sha1sum>" + '\n';
-		if(!depiction.isEmpty() && depiction != null)
+		if(depiction != null && !depiction.isEmpty())
 			pml_foaf += "\t\t" + "<foaf:depiction rdf:resource=\"" + depiction + "\"/>" + '\n';
-		if(!phone.isEmpty() && phone != null)
+		if(phone != null && !phone.isEmpty())
 			pml_foaf += "\t\t" + "<foaf:phone rdf:resource=\"tel:" + phone + "\"/>" + '\n';
-		if(!homepage.isEmpty() && homepage != null)
+		if(homepage != null && !homepage.isEmpty())
 			pml_foaf += "\t\t" + "<foaf:homepage rdf:resource=\"" + homepage + "\"/>" + '\n';
-		if(!workpage.isEmpty() && workpage != null)
+		if(workpage != null && !workpage.isEmpty())
 			pml_foaf += "\t\t" + "<foaf:workplaceHomepage rdf:resource=\"" + workpage  + "\"/>" + '\n';
-		if(!projectpage.isEmpty() && projectpage != null)
+		if(projectpage != null && !projectpage.isEmpty())
 			pml_foaf += "\t\t" + "<foaf:workInfoHomepage rdf:resource=\"" + projectpage + "\"/>" + '\n';
-		if(!schoolpage.isEmpty() && schoolpage != null)
+		if(schoolpage != null && !schoolpage.isEmpty())
 			pml_foaf += "\t\t" + "<foaf:schoolHomepage rdf:resource=\"" + schoolpage + "\"/>" + '\n';
 		//Knows
 		pml_foaf += "\t\t" + "<foaf:knows>" + '\n';
+		
+		if(peopleIKnowVector != null){
+			for(Iterator<Individual> iter = peopleIKnowVector.iterator(); iter.hasNext();){
+				edu.utep.cybershare.DerivAUI.components.IndividualList.Individual ind = (Individual) iter.next();
+				pml_foaf += "\t\t\t" + "<foaf:Person>" + '\n';
+				pml_foaf += "\t\t\t\t" + "<foaf:name>" + ind.getName() + "</foaf:name>\n";
+				pml_foaf += "\t\t\t\t" + "<foaf:seeAlso>" + ind.getURI() + "</foaf:seeAlso>\n";
+				pml_foaf += "\t\t\t" + "</foaf:Person>" + '\n';
+			}
+		}
 		pml_foaf += "\t\t" + "</foaf:knows>" + '\n';
+		
 		//End File
 		pml_foaf += '\t' + "</foaf:Person>" + '\n';
 		pml_foaf += "</rdf:RDF>" + '\n';
