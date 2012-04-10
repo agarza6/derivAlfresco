@@ -1049,7 +1049,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		AM.setUsername(username);
 		AM.setUserPassword(password);
 
-		AM.generateAcertation();
+		AM.generateAssertation();
 		refreshAntecedentUI();
 
 		setCursor(normal);
@@ -1058,7 +1058,6 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	public void closeAction(java.awt.event.ActionEvent evt){
 		System.exit(0);
 	}
-	
 
 	public void addSourceToolAction(java.awt.event.ActionEvent evt){
 		if(AST == null){

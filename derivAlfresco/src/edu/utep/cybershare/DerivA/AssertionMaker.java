@@ -90,7 +90,7 @@ public class AssertionMaker {
 		return sdf.format(cal.getTime());
 	}
 
-	public void generateAcertation(){
+	public void generateAssertation(){
 
 		NodeSetBuilder NSB = new NodeSetBuilder(aClient);
 

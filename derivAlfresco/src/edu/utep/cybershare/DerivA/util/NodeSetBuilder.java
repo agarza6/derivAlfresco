@@ -38,7 +38,6 @@ import org.inference_web.pml.v2.vocabulary.PMLP;
 import pml.dumping.writer.NodesetWriter;
 import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
 
-
 public class NodeSetBuilder {
 
 	//General Variables
@@ -66,15 +65,15 @@ public class NodeSetBuilder {
 	public NodeSetBuilder(AlfrescoClient AC){
 		aClient = AC;
 	}
-	
+
 	public NodeSetBuilder(String user, String pass, String server, String proj){
 		ServerURL = server;
 		projectName = proj;
 		username = user;
 		password = pass;
-		
+
 		aClient = new AlfrescoClient(user, pass, server);
-		
+
 	}
 
 	public String assertArtifact(){
@@ -110,10 +109,19 @@ public class NodeSetBuilder {
 		//Set Rule
 		wtr.setRule("http://inference-web.org/registry/DPR/Told.owl#Told");
 
+		String uniqueFileName = wtr.setFileName(fileName);
+
+		//Log in to Alfresco and Create Node
+		if(aClient == null){
+			aClient = new AlfrescoClient();
+			aClient.logIn(username, password, ServerURL);
+		}
+
+		String node_pml_url = aClient.createNode(projectName, uniqueFileName);
+
 		//Set Paths
 		wtr.setBasePath("");
-		wtr.setBaseURL("http://EMPTYSPACETOREPLACE");
-		wtr.setFileName(fileName);
+		wtr.setBaseURL(aClient.getBaseUrl() + node_pml_url.substring(0,node_pml_url.lastIndexOf('/')));
 
 		//Set Source
 		String[] aSource = sources;
@@ -152,9 +160,20 @@ public class NodeSetBuilder {
 		wtr.setTimestamp(time);
 
 		//Set Paths
+		String uniqueFileName = wtr.setFileName(fileName);
+
+		//Log in to Alfresco and Create Node
+		if(aClient == null){
+			aClient = new AlfrescoClient();
+			aClient.logIn(username, password, ServerURL);
+		}
+
+		String node_pml_url = aClient.createNode(projectName, uniqueFileName);
+
+		//Set Paths
 		wtr.setBasePath("");
-		wtr.setBaseURL("http://EMPTYSPACETOREPLACE");
-		wtr.setFileName(fileName);
+		wtr.setBaseURL(aClient.getBaseUrl() + node_pml_url.substring(0,node_pml_url.lastIndexOf('/')));
+
 
 		//Set Conclusion Information
 		wtr.setInformation(docTypeURI);
@@ -171,7 +190,7 @@ public class NodeSetBuilder {
 
 		id.replaceAll("(\\r|\\n)", "");
 		URL.replaceAll("(\\r|\\n)", "");
-		
+
 		IWAgent agent = (IWAgent)PMLObjectManager.createPMLObject(PMLP.Agent_lname);
 
 		agent.setIdentifier(PMLObjectManager.getObjectID(id));
@@ -213,11 +232,12 @@ public class NodeSetBuilder {
 			aClient = new AlfrescoClient();
 			aClient.logIn(username, password, ServerURL);
 		}
+
+		//String node_pml_url = aClient.createNode(projectName, tempFileName);
+		String node_pml_url = "/d/a/workspace/SpacesStore/" + aClient.getObjectUuid("Projects/" + projectName + "/" + tempFileName) + "/" + tempFileName;
+
 		
-		
-		String node_pml_url = aClient.createNode(projectName, tempFileName);
-		
-		
+
 		// Create temp file to write PML
 		try{
 			FileWriter fstream = new FileWriter(tempFileName);
@@ -228,8 +248,8 @@ public class NodeSetBuilder {
 		}catch (Exception e){System.err.println("Error: " + e.getMessage());}
 
 		//setNewBaseURL and Write PML
-		String base = node_pml_url.substring(0,node_pml_url.lastIndexOf('/'));
-		wtr.setBaseURL(aClient.getBaseUrl() + base);
+//		String base = node_pml_url.substring(0,node_pml_url.lastIndexOf('/'));
+//		wtr.setBaseURL(aClient.getBaseUrl() + base);
 		String resultURI2 = wtr.writePML();
 
 		//Create temp file with Provenance to upload
@@ -237,32 +257,32 @@ public class NodeSetBuilder {
 		pmlFile.deleteOnExit();
 
 		//Update dummy BaseURL with new real Alfresco URL
-		updatePMLReference(pmlFile, "http://EMPTYSPACETOREPLACE", aClient.getBaseUrl() + base);
+		//updatePMLReference(pmlFile, "http://EMPTYSPACETOREPLACE", aClient.getBaseUrl() + base);
 
 		aClient.addContentToNode(node_pml_url, pmlFile);
 
 		return resultURI2;
 	}
 
-	private void updatePMLReference(File file, String oldLine, String newLine){
-		try{
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			String line = "", oldtext = "";
-			while((line = reader.readLine()) != null)
-			{
-				oldtext += line + "\r\n";
-			}
-			reader.close();
-
-			//To replace a line in a file
-			String newtext = oldtext.replaceAll(oldLine, newLine);
-
-			FileWriter writer = new FileWriter(file.getName());
-			writer.write(newtext);
-			writer.close();
-		}catch (IOException ioe){ioe.printStackTrace();
-		}
-	}
+//	private void updatePMLReference(File file, String oldLine, String newLine){
+//		try{
+//			BufferedReader reader = new BufferedReader(new FileReader(file));
+//			String line = "", oldtext = "";
+//			while((line = reader.readLine()) != null)
+//			{
+//				oldtext += line + "\r\n";
+//			}
+//			reader.close();
+//
+//			//To replace a line in a file
+//			String newtext = oldtext.replaceAll(oldLine, newLine);
+//
+//			FileWriter writer = new FileWriter(file.getName());
+//			writer.write(newtext);
+//			writer.close();
+//		}catch (IOException ioe){ioe.printStackTrace();
+//		}
+//	}
 
 	public static void main(String[] args){
 
