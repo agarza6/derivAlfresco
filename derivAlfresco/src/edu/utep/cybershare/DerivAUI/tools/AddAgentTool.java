@@ -94,7 +94,7 @@ public class AddAgentTool extends javax.swing.JFrame {
 		descriptionLabel = new javax.swing.JLabel();
 		descriptionTF = new javax.swing.JTextField();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
 		addAgentLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
 		addAgentLabel.setText("Add New Agent");

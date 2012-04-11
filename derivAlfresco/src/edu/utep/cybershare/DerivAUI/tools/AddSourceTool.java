@@ -168,7 +168,7 @@ public class AddSourceTool extends JFrame {
 		newSouceLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 		newSouceLabel.setText("Add New Source: Person");
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
 		newSouceLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
 		newSouceLabel.setText("Add New Source: Person");
