@@ -59,8 +59,8 @@ public class AgentComboBox extends IndividualComboBox {
 		
 		ResultSet results = ResultSetFactory.fromXML(agents);
 		
-		System.out.println(agents);
-		System.out.println(results);
+//		System.out.println(agents);
+//		System.out.println(results);
 		
 		String format;
 

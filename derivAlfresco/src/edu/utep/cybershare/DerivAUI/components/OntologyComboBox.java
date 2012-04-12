@@ -54,10 +54,8 @@ public class OntologyComboBox extends IndividualComboBox {
 	public void queryOntologies(String project) {
 		Vector<Individual> individuals = new Vector<Individual>();
 
-		String query = "PREFIX wdo: <http://trust.utep.edu/2.0/wdo.owl#>" + '\n' + 
-						"SELECT ?WDO WHERE {" +  '\n' + 
-						"?WDO a wdo:WorkflowDrivenOntology . " + '\n' +  
-						"}";
+		String query = "PREFIX wdo: <http://trust.utep.edu/2.0/wdo.owl#> " +
+				"SELECT ?WDO WHERE {?WDO a wdo:WorkflowDrivenOntology . }";
 
 		String WDOs = aClient.executeQuery(query);
 		

@@ -59,11 +59,10 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 	public void queryAgents() {
 		Vector<Individual> individuals = new Vector<Individual>();
 
-
-
 		String rules = "", query = "";
 		if(Ontology == null){
-			query = "SELECT DISTINCT ?inferenceRule ?ruleLabel ?ruleClass WHERE {?inferenceRule <http://www.w3.org/2000/01/rdf-schema#subClassOf> " +
+			query = "SELECT DISTINCT ?inferenceRule ?ruleLabel ?ruleClass " +
+					"WHERE {?inferenceRule <http://www.w3.org/2000/01/rdf-schema#subClassOf> " +
 					"<http://inference-web.org/2.0/pml-provenance.owl#MethodRule> . " +
 					"?inferenceRule <http://www.w3.org/2000/01/rdf-schema#label> ?ruleLabel . " +
 					"?inferenceRule a ?ruleClass . " +
@@ -76,14 +75,18 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 					"?inferenceRule <http://www.w3.org/2000/01/rdf-schema#label> ?ruleLabel . " +
 					"?inferenceRule a ?ruleClass . " +
 					"FILTER (! regex(str(?ruleClass), \".*Thing.*\",\"i\")) . " +
-					"FILTER (! regex(str(?ruleClass), \".*Rule.*\",\"i\")) . " +
-					"FILTER regex(str(?ruleClass),\" " + Ontology  + " .*\", \"i\") .} " +
+					"FILTER (! regex(str(?ruleClass), \".*Rule.*\",\"i\")) ." +
+					"FILTER regex(str(?ruleClass),\"" + Ontology + ".*\", \"i\") .}" +
 					"ORDER BY ?ruleLabel";
 		}
 
 		rules = aClient.executeQuery(query);
+		
+		System.out.println(rules);
+		
 		ResultSet results = ResultSetFactory.fromXML(rules);
 
+		
 		String rule, IRClass, IRName;
 
 		individuals.add(new Individual("Choose Inference Rule", " -- Choose Inference Rule -- ", "Choose Inference Rule"));

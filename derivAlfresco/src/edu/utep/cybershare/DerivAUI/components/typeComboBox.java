@@ -55,18 +55,24 @@ public class typeComboBox extends IndividualComboBox {
 
 	public void queryAgents() {
 		Vector<Individual> individuals = new Vector<Individual>();
-		
+
 		String types = "";
 		if(ontology == null)
 			types = aClient.executeQuery("SELECT DISTINCT ?informationSubclass ?subclassLabel " +
 					"WHERE { ?informationSubclass <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#Information> . " +
 					"?informationSubclass <http://www.w3.org/2000/01/rdf-schema#label> ?subclassLabel .}");
+		else{
+			types = aClient.executeQuery("SELECT DISTINCT ?informationSubclass ?subclassLabel " +
+					"WHERE { ?informationSubclass <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#Information> . " +
+					"?informationSubclass <http://www.w3.org/2000/01/rdf-schema#label> ?subclassLabel . " +
+					"FILTER regex(str(?informationSubclass),\"" + ontology + ".*\", \"i\") .}");
+		}
 
 		ResultSet results = ResultSetFactory.fromXML(types);
 
 		String type;
 
-		//		System.out.println(types);
+//		System.out.println(types);
 
 		individuals.add(new Individual("Choose Type", " -- Choose Type -- ", "Choose Type"));
 

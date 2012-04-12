@@ -21,6 +21,7 @@ import java.awt.Cursor;
 import java.io.File;
 import javax.swing.JFileChooser;
 
+import edu.utep.cybershare.DerivA.util.AlfrescoClient;
 import edu.utep.cybershare.DerivAUI.DerivAUI;
 import edu.utep.cybershare.DerivAUI.components.*;
 
@@ -32,8 +33,9 @@ import edu.utep.cybershare.DerivAUI.components.*;
 public class OpenOntologyTool extends javax.swing.JFrame {
 
     /** Creates new form openOntology */
-    public OpenOntologyTool(DerivAUI inst) {
+    public OpenOntologyTool(DerivAUI inst, AlfrescoClient ac) {
     	instance = inst;
+    	aClient = ac;
         initComponents();
     }
 
@@ -44,19 +46,19 @@ public class OpenOntologyTool extends javax.swing.JFrame {
         fromLocalRadioButton = new javax.swing.JRadioButton();
         browseButton = new javax.swing.JButton();
         LocalTF = new javax.swing.JTextField();
-        fromCIServerRadioButton = new javax.swing.JRadioButton();
-        OntComboBox = new OntologyComboBox("");
+        fromServerRadioButton = new javax.swing.JRadioButton();
+        OntComboBox = new OntologyComboBox("", aClient);
         cancelButton = new javax.swing.JButton();
         submitButton = new javax.swing.JButton();
         fromURIRadioButton = new javax.swing.JRadioButton();
         URITF = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         openOntologyLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         openOntologyLabel.setText("Open Ontology");
 
-        fromLocalRadioButton.setText("From Local File System");
+        fromLocalRadioButton.setText("From Local File System (Not Available)");
         fromLocalRadioButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				fromLocalAction(evt);
@@ -70,9 +72,9 @@ public class OpenOntologyTool extends javax.swing.JFrame {
 			}
 		});
 
-        fromCIServerRadioButton.setText("From CI-Server");
-        fromCIServerRadioButton.setSelected(true);
-        fromCIServerRadioButton.addActionListener(new java.awt.event.ActionListener() {
+        fromServerRadioButton.setText("Available in Project");
+        fromServerRadioButton.setSelected(true);
+        fromServerRadioButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				fromLocalAction(evt);
 			}
@@ -101,7 +103,7 @@ public class OpenOntologyTool extends javax.swing.JFrame {
 
         URITF.setText("http://");
         
-        ButtonGroup.add(fromCIServerRadioButton);
+        ButtonGroup.add(fromServerRadioButton);
         ButtonGroup.add(fromLocalRadioButton);
         ButtonGroup.add(fromURIRadioButton);
 
@@ -115,7 +117,7 @@ public class OpenOntologyTool extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(OntComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(fromCIServerRadioButton)
+                    .addComponent(fromServerRadioButton)
                     .addComponent(fromLocalRadioButton)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -149,7 +151,7 @@ public class OpenOntologyTool extends javax.swing.JFrame {
                     .addComponent(browseButton)
                     .addComponent(LocalTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fromCIServerRadioButton)
+                .addComponent(fromServerRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(OntComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
@@ -161,8 +163,8 @@ public class OpenOntologyTool extends javax.swing.JFrame {
 
 	    LocalTF.setEnabled(false);
 	    OntComboBox.setEnabled(true);
-	    URITF.setEnabled(false);
 	    browseButton.setEnabled(false);
+	    fromLocalRadioButton.setEnabled(false);
         
         pack();
         setLocationRelativeTo(null);
@@ -223,6 +225,7 @@ public class OpenOntologyTool extends javax.swing.JFrame {
     
     // Variables declaration - do not modify
 	private DerivAUI instance;
+	private AlfrescoClient aClient;
 	
     private javax.swing.ButtonGroup ButtonGroup;
     private javax.swing.JTextField LocalTF;
@@ -230,7 +233,7 @@ public class OpenOntologyTool extends javax.swing.JFrame {
     private javax.swing.JTextField URITF;
     private javax.swing.JButton browseButton;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JRadioButton fromCIServerRadioButton;
+    private javax.swing.JRadioButton fromServerRadioButton;
     private javax.swing.JRadioButton fromLocalRadioButton;
     private javax.swing.JRadioButton fromURIRadioButton;
     private javax.swing.JLabel openOntologyLabel;

@@ -649,7 +649,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		Tabs.addTab("Conclusion", ConclusionIcon, ConclusionPanel);
 
 		InferenceAgentLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
-		InferenceAgentLabel.setText("Select an Inference Agent");
+		InferenceAgentLabel.setText("Select an Inference Software");
 
 		javax.swing.GroupLayout IAgentPanelLayout = new javax.swing.GroupLayout(IAgentPanel);
 		IAgentPanel.setLayout(IAgentPanelLayout);
@@ -672,9 +672,9 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addContainerGap(221, Short.MAX_VALUE))
 		);
 
-		Tabs.addTab("Inference Agent", IAIcon, IAgentPanel);
+		Tabs.addTab("Inference Software", IAIcon, IAgentPanel);
 		InferenceRuleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
-		InferenceRuleLabel.setText("Select Inference Rule for Agent");
+		InferenceRuleLabel.setText("Select Inference Rule for Inference Software");
 
 		javax.swing.GroupLayout IRulePanelLayout = new javax.swing.GroupLayout(IRulePanel);
 		IRulePanel.setLayout(IRulePanelLayout);
@@ -810,7 +810,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				openOntologyToolAction(evt);
 			}
 		});
-		fileMenu.add(loadWDOItem).setEnabled(false);
+		fileMenu.add(loadWDOItem);
 
 		loadSAWItem.setText("Load SAW");
 		fileMenu.add(loadSAWItem).setEnabled(false);
@@ -844,7 +844,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		});
 		ToolsMenu.add(addSourceTool);
 
-		addAgentTool.setText("Add New Agent");
+		addAgentTool.setText("Add New Inference Software");
 		addAgentTool.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				addAgentToolAction(evt);
@@ -1014,8 +1014,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		conclusionTypeComboBox.setOntology(selectedOntologySTR);
 		conclusionTypeComboBox.queryAgents();
 
-		inferenceRuleComboBox.setOntology(selectedOntologySTR);
-		inferenceRuleComboBox.queryAgents();
+//		inferenceRuleComboBox.setOntology(selectedOntologySTR);
+//		inferenceRuleComboBox.queryAgents();
 
 		conclusionTypeComboBox.repaint();
 		inferenceRuleComboBox.repaint();
@@ -1081,7 +1081,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	}
 
 	public void openOntologyToolAction(java.awt.event.ActionEvent evt){
-		new OpenOntologyTool(instance).setVisible(true);
+		new OpenOntologyTool(instance, aClient).setVisible(true);
 	}
 
 	public void addSourceAction(java.awt.event.ActionEvent evt){
