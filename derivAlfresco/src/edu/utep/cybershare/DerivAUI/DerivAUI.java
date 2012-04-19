@@ -1345,8 +1345,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			return null;
 		}
 
-		/*
-		 * Executed in event dispatching thread
+		/* (non-Javadoc)
+		 * @see javax.swing.SwingWorker#done()
 		 */
 		@Override
 		public void done() {

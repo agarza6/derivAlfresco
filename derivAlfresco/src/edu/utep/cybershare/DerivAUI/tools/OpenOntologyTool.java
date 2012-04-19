@@ -20,6 +20,7 @@ package edu.utep.cybershare.DerivAUI.tools;
 import java.awt.Cursor;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import edu.utep.cybershare.DerivA.util.AlfrescoClient;
 import edu.utep.cybershare.DerivAUI.DerivAUI;
@@ -193,15 +194,21 @@ public class OpenOntologyTool extends javax.swing.JFrame {
 
 	public void submitAction(java.awt.event.ActionEvent evt){
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
-		
+		try {
 		IndividualComboBox.Individual Ontology = (IndividualComboBox.Individual) OntComboBox.getSelectedItem();
 		
 		instance.setSelectedOntology(Ontology.getURI());
 		instance.filterByWDO();
 		setVisible(false);
 		
-		
-		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		} catch (Throwable e) {
+      e.printStackTrace();
+      String errMsg = "Error opening ontology: " + e.toString();
+      JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
+		  
+		} finally {
+		  setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
 	}
     
 	public void cancelAction(java.awt.event.ActionEvent evt){
