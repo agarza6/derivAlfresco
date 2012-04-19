@@ -18,6 +18,8 @@ DAMAGE.
 package edu.utep.cybershare.DerivAUI;
 
 import java.awt.Cursor;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -48,7 +50,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	// Variables declaration - do not modify
 	private Cursor waiting, normal;
 	private JFileChooser fc;
-	private File oFile;
+	//private File oFile;
 	private ImageIcon check, uncheck;
 	private ImageIcon SourceIcon, ConclusionIcon, IAIcon, IRIcon, AntecedentIcon;
 
@@ -534,7 +536,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addGroup(conclusionFromLocalTabLayout.createSequentialGroup()
 										.addComponent(conclusionBrowserButton)
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(conclusionBrowserTF, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
+										.addComponent(conclusionBrowserTF, javax.swing.GroupLayout.PREFERRED_SIZE, 450, Short.MAX_VALUE)))
 										.addContainerGap(285, Short.MAX_VALUE))
 		);
 		conclusionFromLocalTabLayout.setVerticalGroup(
@@ -1022,37 +1024,45 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	}
 
 	public void assertAction(java.awt.event.ActionEvent evt){
-		waiting = new Cursor(Cursor.WAIT_CURSOR);
-		setCursor(waiting);
+	  waiting = new Cursor(Cursor.WAIT_CURSOR);
+	  setCursor(waiting);
+	  try {
+	    AssertionMaker AM = new AssertionMaker(aClient);
+	    AM.setUseSessionUser(IncludeUserCheckBox.isSelected());
+	    AM.setSources(CurrentlySelectedSourcesVector);
 
-		AssertionMaker AM = new AssertionMaker(aClient);
-		AM.setUseSessionUser(IncludeUserCheckBox.isSelected());
-		AM.setSources(CurrentlySelectedSourcesVector);
+	    if(conclusionBrowserTF.getText().length() > 0){
+	      String filePath = conclusionBrowserTF.getText();
+	      AM.setDataFilePath(filePath, false);
+	      AM.setFile(new File(filePath));
+	      
+	    } else if(fromURLTF.getText().length() > 0){
+	      AM.setDataFilePath(fromURLTF.getText(), true);
+	    }
 
-		if(conclusionBrowserTF.getText().length() > 0){
-			AM.setDataFilePath(conclusionBrowserTF.getText(), false);
-			AM.setFile(oFile);
-		}else if(fromURLTF.getText().length() > 0){
-			AM.setDataFilePath(fromURLTF.getText(), true);
-		}
+	    IndividualComboBox.Individual docTypeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
+	    AM.setDocumentTypeURI(docTypeInd.getURI());
 
-		IndividualComboBox.Individual docTypeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
-		AM.setDocumentTypeURI(docTypeInd.getURI());
+	    IndividualComboBox.Individual docFormatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
+	    AM.setDocumentFormatURI(docFormatInd.getURI());
 
-		IndividualComboBox.Individual docFormatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
-		AM.setDocumentFormatURI(docFormatInd.getURI());
+	    AM.setCIProjectName(selectedProjectSTR);
+	    AM.setCIServerPath(selectedServerSTR);
 
-		AM.setCIProjectName(selectedProjectSTR);
-		AM.setCIServerPath(selectedServerSTR);
-		AM.setFile(oFile);
+	    AM.setUsername(username);
+	    AM.setUserPassword(password);
 
-		AM.setUsername(username);
-		AM.setUserPassword(password);
+	    AM.generateAssertation();
+	    refreshAntecedentUI();
 
-		AM.generateAssertation();
-		refreshAntecedentUI();
+	  } catch (Throwable e) {
+	    e.printStackTrace();
+	    String errMsg = "Assertion Error: " + e.toString();
+	    JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
 
-		setCursor(normal);
+	  } finally {
+	    setCursor(normal);
+	  }
 	}
 
 	public void closeAction(java.awt.event.ActionEvent evt){
@@ -1062,16 +1072,33 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	public void addSourceToolAction(java.awt.event.ActionEvent evt){
 		if(AST == null){
 			AST = new AddSourceTool(instance, selectedProjectSTR, aClient);
+			AST.addWindowListener(new WindowAdapter() {
+
+        @Override
+        public void windowClosed(WindowEvent e) {
+          AST = null;
+        }
+			  
+      });
 		}
 		AST.setVisible(true);
 	}
 
 	public void addAgentToolAction(java.awt.event.ActionEvent evt){
 		if(AAT == null){
-			if(aClient == null)
+			if(aClient == null) {
 				AAT = new AddAgentTool(instance, selectedServerSTR, selectedProjectSTR, username, password);
-			else
+			} else {
 				AAT = new AddAgentTool(instance, selectedProjectSTR, aClient);
+			}
+	     AAT.addWindowListener(new WindowAdapter() {
+
+	        @Override
+	        public void windowClosed(WindowEvent e) {
+	          AAT = null;
+	        }
+	        
+	      });
 		}
 		AAT.setVisible(true);
 	}
@@ -1142,58 +1169,66 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 	public void derivateAction(java.awt.event.ActionEvent evt){
 
-		waiting = new Cursor(Cursor.WAIT_CURSOR);
-		setCursor(waiting);
+	  waiting = new Cursor(Cursor.WAIT_CURSOR);
+	  setCursor(waiting);
+	  try {
+	    DerivationMaker DM = new DerivationMaker(aClient);
 
-		DerivationMaker DM = new DerivationMaker(aClient);
+	    //set conclusion information
+	    DM.setFile(new File(conclusionBrowserTF.getText()));
 
-		//set conclusion information
-		DM.setFile(oFile);
+	    IndividualComboBox.Individual docFormatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
+	    DM.setConclusionFormatURI(docFormatInd.getURI());
 
-		IndividualComboBox.Individual docFormatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
-		DM.setConclusionFormatURI(docFormatInd.getURI());
+	    IndividualComboBox.Individual docTypeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
+	    DM.setConclusionTypeURI(docTypeInd.getURI());
 
-		IndividualComboBox.Individual docTypeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
-		DM.setConclusionTypeURI(docTypeInd.getURI());
+	    //set derivation information
+	    IndividualComboBox.Individual agentInd = (IndividualComboBox.Individual) agentComboBox.getSelectedItem();
+	    DM.setAgentURI(agentInd.getURI());
 
-		//set derivation information
-		IndividualComboBox.Individual agentInd = (IndividualComboBox.Individual) agentComboBox.getSelectedItem();
-		DM.setAgentURI(agentInd.getURI());
+	    IndividualComboBox.Individual IRInd = (IndividualComboBox.Individual) inferenceRuleComboBox.getSelectedItem();
+	    DM.setInferenceRuleURI(IRInd.getURI());
 
-		IndividualComboBox.Individual IRInd = (IndividualComboBox.Individual) inferenceRuleComboBox.getSelectedItem();
-		DM.setInferenceRuleURI(IRInd.getURI());
+	    //set antecedents
+	    DM.setAntecedentURIs(CurrentlySelectedAntecedentsVector);
 
-		//set antecedents
-		DM.setAntecedentURIs(CurrentlySelectedAntecedentsVector);
+	    DM.setUsername(username);
+	    DM.setUserPassword(password);
+	    DM.setCIProjectName(selectedProjectSTR);
+	    DM.setCIServerPath(selectedServerSTR);
 
-		DM.setUsername(username);
-		DM.setUserPassword(password);
-		DM.setCIProjectName(selectedProjectSTR);
-		DM.setCIServerPath(selectedServerSTR);
+	    DM.generateDerivation();
 
-		DM.generateDerivation();
+	    refreshAntecedentUI();
+	    
+	  } catch (Throwable e) {
+	    e.printStackTrace();
+	    String errMsg = "Derivation Error: " + e.toString();
+	    JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
 
-		refreshAntecedentUI();
+	  } finally {
+	    setCursor(normal);
+	  }
 
-		setCursor(normal);
 	}
 
 	public void browseAction(java.awt.event.ActionEvent evt){
 		//Create a file chooser
-		fc = new JFileChooser(oFile);
+		fc = new JFileChooser(conclusionBrowserTF.getText());
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
 		int returnVal = fc.showOpenDialog(DerivAUI.this);
 
 		String file = null;
-		if (returnVal == JFileChooser.APPROVE_OPTION) 
-			file = fc.getSelectedFile().getAbsolutePath();
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		  file = fc.getSelectedFile().getAbsolutePath();
+		  conclusionBrowserTF.setText(file);
+		}
 
-		conclusionBrowserTF.setText(file);
-		oFile = fc.getSelectedFile();
-		
 	}
 
+	// not sure what this is supposed to do?
 	private void conclusionBrowserTFActionPerformed(java.awt.event.ActionEvent evt) {
 		if(conclusionBrowserTF.getText().length() > 0)
 			conclusionFromURLTab.setEnabled(false);

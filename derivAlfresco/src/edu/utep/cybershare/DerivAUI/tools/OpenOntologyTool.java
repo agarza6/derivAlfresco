@@ -80,12 +80,12 @@ public class OpenOntologyTool extends javax.swing.JFrame {
 			}
 		});
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText("Close");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				cancelAction(evt);
-			}
-		});
+          public void actionPerformed(java.awt.event.ActionEvent evt) {
+            cancelAction(evt);
+          }
+        });
 
         submitButton.setText("Submit");
         submitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -205,7 +205,7 @@ public class OpenOntologyTool extends javax.swing.JFrame {
 	}
     
 	public void cancelAction(java.awt.event.ActionEvent evt){
-		setVisible(false);
+		dispose();
 	}
     
 	public void browseAction(java.awt.event.ActionEvent evt){

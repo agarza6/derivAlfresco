@@ -446,9 +446,7 @@ public class AddSourceTool extends JFrame {
 
 		jTabbedPane1.addTab("Friends I Know", FriendsIKnowPane);
 
-		submitButton.setText("Sumbit");
-
-		cancelButton.setText("Cancel");
+		submitButton.setText("Submit");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -574,7 +572,7 @@ public class AddSourceTool extends JFrame {
 	}
 
 	public void cancelAction(java.awt.event.ActionEvent evt){
-		setVisible(false);
+		dispose();
 	}
 
 	private String getPML(String pmlp_url){
