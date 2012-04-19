@@ -1,0 +1,83 @@
+<project name="DerivA" default="buildStandalone" basedir=".">
+	<description>
+        Build file for DerivA
+    </description>
+
+	<property name="src.dir"     value="src"/>
+	<property name="build.dir"   value="build"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="dist.dir"  value="dist"/>
+	<property name="bin.dir"  value="bin"/>
+	<property name="lib.dir"  value="lib"/>
+	
+	<path id="classpath">
+		<fileset dir="lib" includes="**/*.jar" />
+	</path>
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${dist.dir}"/>
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${dist.dir}" />		
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${classes.dir}"/>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" debug="true" debuglevel="lines,vars,source"/>
+
+		<!-- need to copy over non-class files manually -->
+		<copy todir="${classes.dir}" overwrite="true">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java" />
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+
+	</target>
+
+	<target name="jar" depends="compile">
+		<delete file="${dist.dir}/${ant.project.name}.jar" />
+		<jar destfile="${dist.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
+
+		<!-- copy 3rd party libs to dist folder -->
+		<copy todir="${dist.dir}" overwrite="true">
+			<fileset dir="lib">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+
+	</target>
+
+	<target name="build-incremental" depends="jar"/>
+
+	<target name="build" depends="clean,build-incremental"/>
+		
+	<!-- Builds all of DerivA and its dependent libs into one big jar -->
+	<!-- Note that this target can only be run from Eclipse as it assumes Eclipse has already compiled all
+	 the java code -->
+	<target name="buildStandalone" >
+		<delete dir="${dist.dir}"/>
+		<mkdir dir="${dist.dir}" />
+		
+		<delete dir="${build.dir}"/>
+		<mkdir dir="${build.dir}"/>
+		
+		 <jar destfile="${build.dir}/${ant.project.name}-temp.jar">
+		 	<zipgroupfileset dir="${lib.dir}" includes="**/*.jar" /> 
+		  </jar>
+		  <jar destfile="${build.dir}/${ant.project.name}-temp.jar" update="true">
+		  	<fileset dir="${bin.dir}"/>
+		  </jar>
+		
+		 <jar destfile="${dist.dir}/${ant.project.name}.jar">
+		  <zipfileset excludes="META-INF/*.SF,META-INF/*.DSA,META-INF/*.RSA" src="${build.dir}/${ant.project.name}-temp.jar" />
+		  <manifest>
+		      <attribute name="Main-Class" value="edu.utep.cybershare.DerivAUI.DerivAUI"/>
+		  </manifest>
+		</jar>
+		
+		<delete file="${build.dir}/${ant.project.name}-temp.jar"></delete>
+		
+	</target>	
+	
+</project>
