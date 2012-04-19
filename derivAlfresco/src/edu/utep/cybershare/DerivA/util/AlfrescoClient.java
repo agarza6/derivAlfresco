@@ -18,9 +18,12 @@ DAMAGE.
 package edu.utep.cybershare.DerivA.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
@@ -43,7 +46,15 @@ import org.apache.commons.httpclient.util.URIUtil;
 import edu.utep.cybershare.DerivAUI.DerivAUI;
 
 public class AlfrescoClient extends javax.swing.JFrame {
-
+	private static final long serialVersionUID = 1L;
+	
+	//Directory where all deriva internal files get saved
+	public static final String DERIVA_FOLDER_NAME = ".DerivA";
+	public static final String PROP_FILE_NAME = "auth.properties";
+	public static final String PROP_SERVER = "server";
+	public static final String PROP_USERNAME = "username";
+	public static final String PROP_PROJECT = "project";
+	
 	// Variables declaration - do not modify
 	private javax.swing.JLabel Label;
 	private javax.swing.JLabel Label2;
@@ -102,6 +113,7 @@ public class AlfrescoClient extends javax.swing.JFrame {
 
 		inst = i;
 		initComponents();
+		restoreState();
 
 		// Use the example from CommonsHTTPSender - we need to make sure connections are freed properly
 		MultiThreadedHttpConnectionManager cm = new MultiThreadedHttpConnectionManager();
@@ -111,6 +123,67 @@ public class AlfrescoClient extends javax.swing.JFrame {
 		this.connectionManager = cm;
 
 		setVisible(true);
+	}
+
+	private File getDerivaFolder() {
+		String userHome = System.getProperty("user.home");
+		File homeFolder = new File(userHome);
+		File derivaFolder = new File(homeFolder, DERIVA_FOLDER_NAME);
+		if(!derivaFolder.exists()) {
+			derivaFolder.mkdir();
+		}
+		return derivaFolder;
+	}
+
+	/**
+	 * Load the authentication dialog with cached values so the user doesn't have to retype them every time.
+	 */
+	private void restoreState() {
+	  File derivaFolder = getDerivaFolder();
+	  File propFile = new File(derivaFolder, PROP_FILE_NAME);
+	  if(propFile.exists()) {
+	    // load properties file
+	    try {
+	      Properties props = new Properties();
+	      props.load(new FileInputStream(propFile));
+	      if(props.getProperty(PROP_SERVER) != null) {
+	        serverText.setText(props.getProperty(PROP_SERVER));
+	      }
+	      if(props.getProperty(PROP_PROJECT) != null) {
+	        projectText.setText(props.getProperty(PROP_PROJECT));
+	      }
+	      if(props.getProperty(PROP_USERNAME) != null) {
+	        usernameText.setText(props.getProperty(PROP_USERNAME));
+	      }
+	      
+	      // default the cursor to the password box
+	      passwordText.requestFocusInWindow();
+	      
+	    } catch (Throwable e) {
+	      e.printStackTrace();
+	    }
+
+	  } else {
+	    serverText.setText("http://localhost:8080/alfresco");
+	  }
+	}
+
+	private void saveState() {
+	  File derivaFolder = getDerivaFolder();
+	  File propFile = new File(derivaFolder, PROP_FILE_NAME);
+
+	  try {
+	    Properties props = new Properties();
+	    props.put(PROP_SERVER, serverText.getText());
+	    props.put(PROP_PROJECT, projectText.getText());
+	    props.put(PROP_USERNAME, usernameText.getText());
+	    props.store(new FileOutputStream(propFile), "");
+
+	  } catch (Throwable e) {
+	    e.printStackTrace();
+	  }
+
+
 	}
 
 	/**
@@ -159,10 +232,11 @@ public class AlfrescoClient extends javax.swing.JFrame {
 				submitButtonActionPerformed(evt);
 			}
 		});
+		
+		// make the submit button the default button when enter key is pressed
+		getRootPane().setDefaultButton(submitButton);
 
 		serverLabel.setText("Server: ");
-
-		serverText.setText("http://localhost:8080/alfresco");
 
 		projectLabel.setText("Project: ");
 
@@ -634,6 +708,10 @@ public class AlfrescoClient extends javax.swing.JFrame {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		
+		} finally {
+			// save props
+			saveState();
 		}
 
 		//		setVisible(false);
