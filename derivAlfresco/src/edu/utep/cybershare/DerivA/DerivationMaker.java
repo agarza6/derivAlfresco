@@ -68,6 +68,8 @@ public class DerivationMaker {
 		NodeSetBuilder NSB = new NodeSetBuilder(aClient);
 
 		String dataFileName = file.getName();
+		dataFileName = dataFileName.replaceAll("(\\r|\\n)", "");
+		dataFileName = dataFileName.replaceAll(" ", "_");
 		conclusionURI = aClient.uploadFile(project, file);
 		
 		try {

@@ -53,14 +53,17 @@ public class AgentComboBox extends IndividualComboBox {
 	public void queryAgents() {
 		Vector<Individual> individuals = new Vector<Individual>();
 
-		String query = "SELECT ?inferenceEngine WHERE {?inferenceEngine a <http://inference-web.org/2.0/pml-provenance.owl#Agent> .}";
+		String query = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
+				"PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
+				"SELECT ?inferenceEngine " +
+				"WHERE { {?inferenceEngine a pmlp:Agent } UNION {?inferenceEngine rdfs:subClassOf pmlp:Agent } }";
 
 		String agents = aClient.executeQuery(query);
 		
 		ResultSet results = ResultSetFactory.fromXML(agents);
 		
-//		System.out.println(agents);
-//		System.out.println(results);
+		System.out.println(agents);
+		System.out.println(results);
 		
 		String format;
 

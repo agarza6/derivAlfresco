@@ -82,7 +82,7 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 
 		rules = aClient.executeQuery(query);
 		
-		System.out.println(rules);
+//		System.out.println(rules);
 		
 		ResultSet results = ResultSetFactory.fromXML(rules);
 

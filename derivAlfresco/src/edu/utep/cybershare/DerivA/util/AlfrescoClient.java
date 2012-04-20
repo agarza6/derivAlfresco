@@ -672,7 +672,11 @@ public class AlfrescoClient extends javax.swing.JFrame {
 	 */
 	public String uploadFile(String project, File file){
 
-		String nodeURL = createNode(project, file.getName());
+		String dataFileName = file.getName();
+		dataFileName = dataFileName.replaceAll("(\\r|\\n)", "");
+		dataFileName = dataFileName.replaceAll(" ", "_");
+		
+		String nodeURL = createNode(project, dataFileName);
 
 		addContentToNode(nodeURL, file);
 

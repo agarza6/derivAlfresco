@@ -98,6 +98,8 @@ public class AssertionMaker {
 	
 		if(!conclusionFromURL){
 			dataFileName = file.getName();
+			dataFileName = dataFileName.replaceAll("(\\r|\\n)", "");
+			dataFileName = dataFileName.replaceAll(" ", "_");
 			conclusionURI = aClient.uploadFile(project, file);
 			
 		}else{

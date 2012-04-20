@@ -273,8 +273,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		addSourceTool = new javax.swing.JMenuItem();
 		addAgentTool = new javax.swing.JMenuItem();
 
-		check = new javax.swing.ImageIcon(getClass().getResource("images/tick.png"));
-		uncheck = new javax.swing.ImageIcon(getClass().getResource("images/checkbox_unchecked.png"));
+		check = new ImageIcon(getClass().getResource("images/tick.png"));
+		uncheck = new ImageIcon(getClass().getResource("images/checkbox_unchecked.png"));
 
 		SourceIcon = uncheck;
 		ConclusionIcon = uncheck;
@@ -283,6 +283,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		AntecedentIcon = uncheck;
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		this.setTitle("derivA");
 
 		ServerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
 		ServerLabel.setText("Server:");
@@ -604,6 +605,17 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		);
 
 		conclusionFromTab.addTab("From URL", conclusionFromURLTab);
+		conclusionFormatComboBox.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				changeConclusionCheckStatus(evt);
+			}
+		});
+		
+		conclusionTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				changeConclusionCheckStatus(evt);
+			}
+		});
 
 		javax.swing.GroupLayout ConclusionPanelLayout = new javax.swing.GroupLayout(ConclusionPanel);
 		ConclusionPanel.setLayout(ConclusionPanelLayout);
@@ -650,6 +662,11 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		InferenceAgentLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
 		InferenceAgentLabel.setText("Select an Inference Software");
+		agentComboBox.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				changeIACheckStatus(evt);
+			}
+		});
 
 		javax.swing.GroupLayout IAgentPanelLayout = new javax.swing.GroupLayout(IAgentPanel);
 		IAgentPanel.setLayout(IAgentPanelLayout);
@@ -675,6 +692,11 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		Tabs.addTab("Inference Software", IAIcon, IAgentPanel);
 		InferenceRuleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
 		InferenceRuleLabel.setText("Select Inference Rule for Inference Software");
+		inferenceRuleComboBox.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				changeIRCheckStatus(evt);
+			}
+		});
 
 		javax.swing.GroupLayout IRulePanelLayout = new javax.swing.GroupLayout(IRulePanel);
 		IRulePanel.setLayout(IRulePanelLayout);
@@ -698,6 +720,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		);
 
 		Tabs.addTab("Inference Rule", IRIcon, IRulePanel);
+
 
 		AntecedentLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
 		AntecedentLabel.setText("Select All Antecedents that Derive the Selected Conclusion");
@@ -916,6 +939,42 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		about.setVisible(true);
 	}
 
+	public void changeIACheckStatus(java.awt.event.ActionEvent evt){
+		IndividualComboBox.Individual agentInd = (IndividualComboBox.Individual) agentComboBox.getSelectedItem();
+		if(!agentInd.getName().equalsIgnoreCase(" -- Choose Agent -- "))
+			Tabs.setIconAt(2, check);
+		else
+			Tabs.setIconAt(2,uncheck);
+	}
+	public void changeIRCheckStatus(java.awt.event.ActionEvent evt){
+		IndividualComboBox.Individual ruleInd = (IndividualComboBox.Individual) inferenceRuleComboBox.getSelectedItem();
+		if(!ruleInd.getName().equalsIgnoreCase(" -- Choose Inference Rule -- "))
+			Tabs.setIconAt(3, check);
+		else
+			Tabs.setIconAt(3,uncheck);
+	}
+	
+	public void changeConclusionCheckStatus(java.awt.event.ActionEvent evt){
+		int count = 0;
+		
+		IndividualComboBox.Individual formatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
+		IndividualComboBox.Individual typeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
+		
+		if(!formatInd.getName().equalsIgnoreCase(" -- Choose Format -- "))
+			count++;
+		
+		if(!typeInd.getName().equalsIgnoreCase(" -- Choose Type -- "))
+			count++;
+		
+		if(oFile != null)
+			count++;
+		
+		if(count == 3)
+			Tabs.setIconAt(1, check);
+		else
+			Tabs.setIconAt(1,uncheck);
+	}
+	
 	public void assertModeAction(java.awt.event.ActionEvent evt){
 		MODE = ASSERT_MODE;
 
@@ -924,7 +983,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		Tabs.setEnabledAt(2, false);
 		Tabs.setEnabledAt(3, false);
 		Tabs.setEnabledAt(4, false);
-
+		
 		conclusionList.setEnabled(false);
 		conclusionBrowserButton.setEnabled(true);
 		AssertButton.setEnabled(true);
@@ -936,6 +995,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	public void derivateModeAction(java.awt.event.ActionEvent evt){
 		MODE = DERIVATE_MODE;
 
+		ConclusionIcon = check;
+		
 		Tabs.setEnabledAt(0, false);
 		Tabs.setEnabledAt(1, true);
 		Tabs.setEnabledAt(2, true);
@@ -948,6 +1009,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		if(Tabs.getSelectedIndex() == 0)
 			Tabs.setSelectedIndex(1);
+		
+		
 	}
 
 	public void docDerivateModeAction(java.awt.event.ActionEvent evt){
@@ -1095,7 +1158,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			CurrentlySelectedSourcesVector.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSS);
 		}
 
-		SourceIcon = check;
+		Tabs.setIconAt(0, check);
 
 		currentlySelectedSourcesList.setModel(CurrentlySelectedSourcesVector);
 		currentlySelectedSourcesList.repaint();
@@ -1109,6 +1172,10 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				CurrentlySelectedSourcesVector.remove(CSS);
 			}
 		}
+		
+		if(CurrentlySelectedSourcesVector.isEmpty())
+			Tabs.setIconAt(0, uncheck);
+		
 		currentlySelectedSourcesList.setModel(CurrentlySelectedSourcesVector);
 		currentlySelectedSourcesList.repaint();
 	}
@@ -1124,6 +1191,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			CurrentlySelectedAntecedentsVector.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSA);
 		}
 
+		Tabs.setIconAt(4, check);
+		
 		currentlySelectedAntecedentList.setModel(CurrentlySelectedAntecedentsVector);
 		currentlySelectedAntecedentList.repaint();
 
@@ -1136,6 +1205,10 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				CurrentlySelectedAntecedentsVector.remove(CSA);
 			}
 		}
+		
+		if(CurrentlySelectedAntecedentsVector.isEmpty())
+			Tabs.setIconAt(4, uncheck);
+		
 		currentlySelectedAntecedentList.setModel(CurrentlySelectedAntecedentsVector);
 		currentlySelectedAntecedentList.repaint();
 	}
@@ -1191,6 +1264,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		conclusionBrowserTF.setText(file);
 		oFile = fc.getSelectedFile();
+		
+		changeConclusionCheckStatus(new java.awt.event.ActionEvent(this, 0, null));	//passing null values since we don't need them.
 		
 	}
 

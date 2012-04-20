@@ -41,18 +41,10 @@ public class SourcesList extends IndividualList {
 	private void queryPMLP(){
 		individuals = new Vector<Individual>();
 
-		String query = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + 
-				"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
-				"PREFIX owl: <http://www.w3.org/2002/07/owl#>" +
-				"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>" +
-				"PREFIX pmlj: <http://inference-web.org/2.0/pml-justification.owl#>" +
-				"PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
-				"PREFIX pml-sparql: <http://trust.utep.edu/sparql-pml#>" +
-				"PREFIX ds: <http://inference-web.org/2.0/ds.owl#>" +
-				"select ?URI ?NAME where {" +
-				"?URI a pmlp:Person ." +
-				"?URI pmlp:hasName ?NAME ." +
-				"}";
+		String query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
+				"SELECT ?URI ?NAME " +
+				"WHERE { ?URI a pmlp:Person . " +
+				"?URI pmlp:hasName ?NAME . }";
 
 		String pml_j = aClient.executeQuery(query);
 
