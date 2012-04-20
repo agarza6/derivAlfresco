@@ -559,12 +559,6 @@ public class AlfrescoClient extends javax.swing.JFrame {
 	 */
 	public String createNode(String project, String filename){
 
-		try {
-			filename = URLEncoder.encode(filename, "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
-
 		StringBuilder createNodeURL = getDerivAWebScriptUrl();
 		createNodeURL.append("createNode");
 		appendParameter(createNodeURL, "project", project);

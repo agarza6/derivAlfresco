@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.net.URLEncoder;
 
+import org.apache.commons.httpclient.util.URIUtil;
+
 import edu.utep.cybershare.DerivA.util.*;
 import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
 
@@ -92,7 +94,7 @@ public class AssertionMaker {
 
 	public void generateAssertation(){
 
-		NodeSetBuilder NSB = new NodeSetBuilder(aClient);
+	  NodeSetBuilder NSB = new NodeSetBuilder(aClient);
 
 		String dataFileName = "";
 	
@@ -112,30 +114,46 @@ public class AssertionMaker {
 			dataFileName = dataFileName.replace("/", "_slash_");
 		}
 
-//		if(useSessionUser){
-//			sources[sources.length - 1] = uploader.getUserInformation();
-//		}
 
-		try {
-			
-			dataFileName = URLEncoder.encode(dataFileName, "UTF-8");
-			NSB.projectName = project;
-			
-			NSB.artifactURI = conclusionURI;
-			NSB.docTypeURI = docTypeURI;
-			NSB.formatURI = formatURI;
-			NSB.sources = sources;
-			
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		
-		//Build Nodeset
-		NSB.fileName = dataFileName;
-		pmljURI = NSB.assertArtifact();
+	  if(!conclusionFromURL){
+	    dataFileName = file.getName();
+	    conclusionURI = aClient.uploadFile(project, file);
 
-		//Aggregate to a Triple Store HERE
-		aClient.crawlProject(project);
-		
+	  }else{
+	    conclusionURI = dataFilePath;
+	    dataFileName = dataFilePath.replace("http","");
+	    dataFileName = dataFileName.replace("://", "");
+	    if(dataFileName.lastIndexOf('/') == (dataFileName.length() - 1)){
+	      dataFileName = dataFileName.substring(0, dataFileName.length() - 1);
+	    }
+	    dataFileName = dataFileName.replace("/", "_slash_");
+	  }
+
+	  //		if(useSessionUser){
+	  //			sources[sources.length - 1] = uploader.getUserInformation();
+	  //		}
+
+	  NSB.projectName = project;
+
+	  NSB.artifactURI = conclusionURI;
+	  NSB.docTypeURI = docTypeURI;
+	  NSB.formatURI = formatURI;
+	  NSB.sources = sources;
+
+	  //Build Nodeset
+	  try {
+	    // NSB needs file name encoded or it will throw an exception, although the 
+	    // file name shouldn't have to be encoded at this point so the file name
+	    // matches the conclusion file name
+	    dataFileName = URIUtil.encodePathQuery(dataFileName);
+	  } catch (Throwable e) {
+	    e.printStackTrace();
+	  }
+	  NSB.fileName = dataFileName;
+	  pmljURI = NSB.assertArtifact();
+
+	  //Aggregate to a Triple Store HERE
+	  aClient.crawlProject(project);
+
 	}
 }

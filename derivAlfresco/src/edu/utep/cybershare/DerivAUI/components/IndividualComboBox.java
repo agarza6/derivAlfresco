@@ -354,11 +354,13 @@ public class IndividualComboBox extends JComboBox {
 			int pos = 0;
 			Object item = null;
 			//search for a matching item
+			// do a case insensitive search
+			String patternLowerCase = pattern.toLowerCase();
 			while (bottom <= top) {
 				pos = (bottom + top) >> 1;
 				item = comboBox.getModel().getElementAt(pos);
 				//int compare = compareStartIgnoreCase(item.toString(), pattern);
-				int compare = compareStart(item.toString(), pattern);
+				int compare = compareStart(item.toString().toLowerCase(), patternLowerCase);
 				if (compare == 0) {
 					break;
 				}
@@ -375,7 +377,7 @@ public class IndividualComboBox extends JComboBox {
 			for (int i=bottom; i<pos; i++) {
 				Object anItem = comboBox.getModel().getElementAt(i);
 				//if (startsWithIgnoreCase(anItem.toString(), pattern)) {
-				if(anItem.toString().startsWith(pattern)){	
+				if(anItem.toString().toLowerCase().startsWith(patternLowerCase)){	
 					return anItem;
 				}
 			}
@@ -386,7 +388,8 @@ public class IndividualComboBox extends JComboBox {
 			Object selectedItem = comboBox.getModel().getSelectedItem();
 			// only search for a different item if the currently selected does not match
 			//if (selectedItem != null && startsWithIgnoreCase(selectedItem.toString(), pattern)) {
-			if(selectedItem != null && selectedItem.toString().startsWith(pattern)){
+			// Do a case-insensitive search
+			if(selectedItem != null && selectedItem.toString().toLowerCase().startsWith(pattern.toLowerCase())){
 				return selectedItem;
 			}
 			return binaryLookup(pattern);

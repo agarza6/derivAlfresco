@@ -17,10 +17,6 @@ DAMAGE.
 
 package edu.utep.cybershare.DerivAUI.tools;
 
-import java.awt.Cursor;
-import javax.swing.JOptionPane;
-//import edu.utep.trust.provenance.RDFAggregater;
-//import edu.utep.trust.provenance.RDFAggregater_Service;
 
 /**
  * aggregaterTool.java
@@ -43,19 +39,19 @@ public class AggregaterTool extends javax.swing.JFrame {
         cancelButton = new javax.swing.JButton();
         submitButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         enterURILabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         enterURILabel.setText("Enter Full URI");
 
         URITF.setText("http://");
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText("Close");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				cancelAction(evt);
-			}
-		});
+          public void actionPerformed(java.awt.event.ActionEvent evt) {
+            cancelAction(evt);
+          }
+        });
 
         submitButton.setText("Submit");
         submitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -121,7 +117,7 @@ public class AggregaterTool extends javax.swing.JFrame {
 	}
 	
 	public void cancelAction(java.awt.event.ActionEvent evt){
-		setVisible(false);
+		dispose();
 	}
 
     // Variables declaration - do not modify

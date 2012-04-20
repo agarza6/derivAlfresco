@@ -76,13 +76,13 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 					"?inferenceRule a ?ruleClass . " +
 					"FILTER (! regex(str(?ruleClass), \".*Thing.*\",\"i\")) . " +
 					"FILTER (! regex(str(?ruleClass), \".*Rule.*\",\"i\")) ." +
-					"FILTER regex(str(?ruleClass),\"" + Ontology + ".*\", \"i\") .}" +
+					"FILTER regex(str(?inferenceRule),\"" + Ontology + ".*\", \"i\") .}" +
 					"ORDER BY ?ruleLabel";
 		}
 
 		rules = aClient.executeQuery(query);
-		
-//		System.out.println(rules);
+
+		//System.out.println(rules);
 		
 		ResultSet results = ResultSetFactory.fromXML(rules);
 
