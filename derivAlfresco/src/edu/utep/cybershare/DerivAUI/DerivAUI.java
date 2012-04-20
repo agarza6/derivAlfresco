@@ -1016,8 +1016,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		conclusionTypeComboBox.setOntology(selectedOntologySTR);
 		conclusionTypeComboBox.queryAgents();
 
-//		inferenceRuleComboBox.setOntology(selectedOntologySTR);
-//		inferenceRuleComboBox.queryAgents();
+		inferenceRuleComboBox.setOntology(selectedOntologySTR);
+		inferenceRuleComboBox.queryAgents();
 
 		conclusionTypeComboBox.repaint();
 		inferenceRuleComboBox.repaint();
