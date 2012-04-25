@@ -31,6 +31,9 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 
 import edu.utep.cybershare.DerivA.*;
 import edu.utep.cybershare.DerivA.util.AlfrescoClient;
@@ -171,8 +174,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	/** Creates new form DerivAGUI */
 	public DerivAUI() {
 		serverLogin();
-		
-//		initTripleStoreComponents();
+
+		//		initTripleStoreComponents();
 	}
 
 	public void setSelectedOntology(String sel){
@@ -356,7 +359,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
 												.addComponent(DocumentDerivationModeLabel)
 												.addGap(37, 37, 37))
-		);
+				);
 		jPanel1Layout.setVerticalGroup(
 				jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel1Layout.createSequentialGroup()
@@ -372,7 +375,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 										.addComponent(DerivateArtifactModeLabel)
 										.addComponent(DocumentDerivationModeLabel))
 										.addContainerGap())
-		);
+				);
 
 		javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
 		mainPanel.setLayout(mainPanelLayout);
@@ -397,7 +400,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 												.addGap(36, 36, 36)
 												.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
 												.addContainerGap(45, Short.MAX_VALUE))
-		);
+				);
 		mainPanelLayout.setVerticalGroup(
 				mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(mainPanelLayout.createSequentialGroup()
@@ -411,7 +414,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 								.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+				);
 
 		SourcesLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
 		SourcesLabel.setText("Select All Sources");
@@ -467,7 +470,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 																.addGap(316, 316, 316)
 																.addComponent(currentlySelectedSourcesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
 																.addContainerGap(101, Short.MAX_VALUE)))
-		);
+				);
 		SourcesPanelLayout.setVerticalGroup(
 				SourcesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(SourcesPanelLayout.createSequentialGroup()
@@ -493,7 +496,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 														.addGap(34, 34, 34)
 														.addComponent(currentlySelectedSourcesLabel)
 														.addContainerGap(225, Short.MAX_VALUE)))
-		);
+				);
 
 		Tabs.addTab("Sources", SourceIcon, SourcesPanel);
 
@@ -520,11 +523,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			}
 		});
 
-		conclusionBrowserTF.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				conclusionBrowserTFActionPerformed(evt);
-			}
-		});
+		conclusionBrowserTF.getDocument().addDocumentListener(new MyDocumentListener());
 
 		javax.swing.GroupLayout conclusionFromLocalTabLayout = new javax.swing.GroupLayout(conclusionFromLocalTab);
 		conclusionFromLocalTab.setLayout(conclusionFromLocalTabLayout);
@@ -539,7 +538,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addComponent(conclusionBrowserTF, javax.swing.GroupLayout.PREFERRED_SIZE, 450, Short.MAX_VALUE)))
 										.addContainerGap(285, Short.MAX_VALUE))
-		);
+				);
 		conclusionFromLocalTabLayout.setVerticalGroup(
 				conclusionFromLocalTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(conclusionFromLocalTabLayout.createSequentialGroup()
@@ -550,7 +549,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addComponent(conclusionBrowserButton)
 								.addComponent(conclusionBrowserTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addContainerGap(67, Short.MAX_VALUE))
-		);
+				);
 
 		conclusionFromTab.addTab("From Local File System", conclusionFromLocalTab);
 
@@ -568,7 +567,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(fromServerLabel))
 								.addContainerGap(256, Short.MAX_VALUE))
-		);
+				);
 		conclusionFromServerTabLayout.setVerticalGroup(
 				conclusionFromServerTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(conclusionFromServerTabLayout.createSequentialGroup()
@@ -577,7 +576,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
 						.addContainerGap())
-		);
+				);
 
 		conclusionFromTab.addTab("From CI-Server", conclusionFromServerTab);
 
@@ -595,7 +594,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addComponent(fromURLTF, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
 								.addComponent(fromURLLabel))
 								.addContainerGap())
-		);
+				);
 		conclusionFromURLTabLayout.setVerticalGroup(
 				conclusionFromURLTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(conclusionFromURLTabLayout.createSequentialGroup()
@@ -604,7 +603,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(fromURLTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(70, Short.MAX_VALUE))
-		);
+				);
 
 		conclusionFromTab.addTab("From URL", conclusionFromURLTab);
 		conclusionFormatComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -612,13 +611,13 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				changeConclusionCheckStatus(evt);
 			}
 		});
-		
+
 		conclusionTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				changeConclusionCheckStatus(evt);
 			}
 		});
-
+		
 		javax.swing.GroupLayout ConclusionPanelLayout = new javax.swing.GroupLayout(ConclusionPanel);
 		ConclusionPanel.setLayout(ConclusionPanelLayout);
 		ConclusionPanelLayout.setHorizontalGroup(
@@ -639,7 +638,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 														.addComponent(AssertButton)
 														.addComponent(conclusionFromTab, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)))
 														.addContainerGap(22, Short.MAX_VALUE))
-		);
+				);
 		ConclusionPanelLayout.setVerticalGroup(
 				ConclusionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(ConclusionPanelLayout.createSequentialGroup()
@@ -658,7 +657,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addComponent(AssertButton)
 										.addContainerGap())
-		);
+				);
 
 		Tabs.addTab("Conclusion", ConclusionIcon, ConclusionPanel);
 
@@ -680,7 +679,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addComponent(agentComboBox, 0, 557, Short.MAX_VALUE)
 								.addComponent(InferenceAgentLabel))
 								.addContainerGap())
-		);
+				);
 		IAgentPanelLayout.setVerticalGroup(
 				IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(IAgentPanelLayout.createSequentialGroup()
@@ -689,7 +688,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(agentComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(221, Short.MAX_VALUE))
-		);
+				);
 
 		Tabs.addTab("Inference Agent", IAIcon, IAgentPanel);
 		InferenceRuleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -711,7 +710,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addComponent(inferenceRuleComboBox, 0, 557, Short.MAX_VALUE)
 								.addComponent(InferenceRuleLabel))
 								.addContainerGap())
-		);
+				);
 		IRulePanelLayout.setVerticalGroup(
 				IRulePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(IRulePanelLayout.createSequentialGroup()
@@ -720,7 +719,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(inferenceRuleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(221, Short.MAX_VALUE))
-		);
+				);
 
 		Tabs.addTab("Inference Rule", IRIcon, IRulePanel);
 
@@ -795,7 +794,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 																										.addComponent(derivateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
 																										.addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))))))
 																										.addGap(13, 13, 13))
-		);
+				);
 		AntecedentPanelLayout.setVerticalGroup(
 				AntecedentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(AntecedentPanelLayout.createSequentialGroup()
@@ -821,7 +820,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 																.addGap(1, 1, 1)
 																.addComponent(derivateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
 																.addGap(39, 39, 39))
-		);
+				);
 
 		Tabs.addTab("Derived From", AntecedentIcon, AntecedentPanel);
 
@@ -905,7 +904,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addComponent(ProgressBar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(Tabs, javax.swing.GroupLayout.Alignment.LEADING))
 								.addContainerGap(10, Short.MAX_VALUE))
-		);
+				);
 		layout.setVerticalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -916,7 +915,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addGap(1, 1, 1)
 						.addComponent(ProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap())
-		);
+				);
 
 		pack();
 		setLocationRelativeTo(null);
@@ -956,28 +955,28 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		else
 			Tabs.setIconAt(3,uncheck);
 	}
-	
+
 	public void changeConclusionCheckStatus(java.awt.event.ActionEvent evt){
 		int count = 0;
-		
+
 		IndividualComboBox.Individual formatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
 		IndividualComboBox.Individual typeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
-		
+
 		if(!formatInd.getName().equalsIgnoreCase(" -- Choose Format -- "))
 			count++;
-		
+
 		if(!typeInd.getName().equalsIgnoreCase(" -- Choose Type -- "))
 			count++;
-		
-		if(oFile != null)
+
+		if(!conclusionBrowserTF.getText().isEmpty())
 			count++;
-		
+
 		if(count == 3)
 			Tabs.setIconAt(1, check);
 		else
 			Tabs.setIconAt(1,uncheck);
 	}
-	
+
 	public void assertModeAction(java.awt.event.ActionEvent evt){
 		MODE = ASSERT_MODE;
 
@@ -986,7 +985,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		Tabs.setEnabledAt(2, false);
 		Tabs.setEnabledAt(3, false);
 		Tabs.setEnabledAt(4, false);
-		
+
 		conclusionList.setEnabled(false);
 		conclusionBrowserButton.setEnabled(true);
 		AssertButton.setEnabled(true);
@@ -999,7 +998,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		MODE = DERIVATE_MODE;
 
 		ConclusionIcon = check;
-		
+
 		Tabs.setEnabledAt(0, false);
 		Tabs.setEnabledAt(1, true);
 		Tabs.setEnabledAt(2, true);
@@ -1012,8 +1011,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		if(Tabs.getSelectedIndex() == 0)
 			Tabs.setSelectedIndex(1);
-		
-		
+
+
 	}
 
 	public void docDerivateModeAction(java.awt.event.ActionEvent evt){
@@ -1072,10 +1071,11 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		agentComboBox.queryAgents();
 		agentComboBox.repaint();
 	}
-	
+
 	public void filterByWDO(){
 
 		System.out.println("filtering by: " + selectedOntologySTR);
+		OntologyLabel.setText(selectedOntologySTR);
 
 		conclusionTypeComboBox.setOntology(selectedOntologySTR);
 		conclusionTypeComboBox.queryAgents();
@@ -1088,45 +1088,46 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	}
 
 	public void assertAction(java.awt.event.ActionEvent evt){
-	  waiting = new Cursor(Cursor.WAIT_CURSOR);
-	  setCursor(waiting);
-	  try {
-	    AssertionMaker AM = new AssertionMaker(aClient);
-	    AM.setUseSessionUser(IncludeUserCheckBox.isSelected());
-	    AM.setSources(CurrentlySelectedSourcesVector);
+		waiting = new Cursor(Cursor.WAIT_CURSOR);
+		setCursor(waiting);
+		try {
+			AssertionMaker AM = new AssertionMaker(aClient);
+			AM.setUseSessionUser(IncludeUserCheckBox.isSelected());
+			AM.setSources(CurrentlySelectedSourcesVector);
 
-	    if(conclusionBrowserTF.getText().length() > 0){
-	      String filePath = conclusionBrowserTF.getText();
-	      AM.setDataFilePath(filePath, false);
-	      AM.setFile(new File(filePath));
-	      
-	    } else if(fromURLTF.getText().length() > 0){
-	      AM.setDataFilePath(fromURLTF.getText(), true);
-	    }
+			if(conclusionBrowserTF.getText().length() > 0){
+				String filePath = conclusionBrowserTF.getText();
+				AM.setDataFilePath(filePath, false);
+				AM.setFile(new File(filePath));
 
-	    IndividualComboBox.Individual docTypeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
-	    AM.setDocumentTypeURI(docTypeInd.getURI());
+			} else if(fromURLTF.getText().length() > 0){
+				AM.setDataFilePath(fromURLTF.getText(), true);
+			}
 
-	    IndividualComboBox.Individual docFormatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
-	    AM.setDocumentFormatURI(docFormatInd.getURI());
+			IndividualComboBox.Individual docTypeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
+			AM.setDocumentTypeURI(docTypeInd.getURI());
 
-	    AM.setCIProjectName(selectedProjectSTR);
-	    AM.setCIServerPath(selectedServerSTR);
+			IndividualComboBox.Individual docFormatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
+			AM.setDocumentFormatURI(docFormatInd.getURI());
 
-	    AM.setUsername(username);
-	    AM.setUserPassword(password);
+			AM.setCIProjectName(selectedProjectSTR);
+			AM.setCIServerPath(selectedServerSTR);
 
-	    AM.generateAssertation();
-	    refreshAntecedentUI();
+			AM.setUsername(username);
+			AM.setUserPassword(password);
 
-	  } catch (Throwable e) {
-	    e.printStackTrace();
-	    String errMsg = "Assertion Error: " + e.toString();
-	    JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
+			AM.generateAssertation();
+			refreshAntecedentUI();
 
-	  } finally {
-	    setCursor(normal);
-	  }
+		} catch (Throwable e) {
+			e.printStackTrace();
+			String errMsg = "Assertion Error: " + e.toString();
+			JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
+
+		} finally {
+			JOptionPane.showMessageDialog(null, "Assertion Complete.");
+			setCursor(normal);
+		}
 	}
 
 	public void closeAction(java.awt.event.ActionEvent evt){
@@ -1138,12 +1139,12 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			AST = new AddSourceTool(instance, selectedProjectSTR, aClient);
 			AST.addWindowListener(new WindowAdapter() {
 
-        @Override
-        public void windowClosed(WindowEvent e) {
-          AST = null;
-        }
-			  
-      });
+				@Override
+				public void windowClosed(WindowEvent e) {
+					AST = null;
+				}
+
+			});
 		}
 		AST.setVisible(true);
 	}
@@ -1155,14 +1156,14 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			} else {
 				AAT = new AddAgentTool(instance, selectedProjectSTR, aClient);
 			}
-	     AAT.addWindowListener(new WindowAdapter() {
+			AAT.addWindowListener(new WindowAdapter() {
 
-	        @Override
-	        public void windowClosed(WindowEvent e) {
-	          AAT = null;
-	        }
-	        
-	      });
+				@Override
+				public void windowClosed(WindowEvent e) {
+					AAT = null;
+				}
+
+			});
 		}
 		AAT.setVisible(true);
 	}
@@ -1200,10 +1201,10 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				CurrentlySelectedSourcesVector.remove(CSS);
 			}
 		}
-		
+
 		if(CurrentlySelectedSourcesVector.isEmpty())
 			Tabs.setIconAt(0, uncheck);
-		
+
 		currentlySelectedSourcesList.setModel(CurrentlySelectedSourcesVector);
 		currentlySelectedSourcesList.repaint();
 	}
@@ -1220,7 +1221,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		}
 
 		Tabs.setIconAt(4, check);
-		
+
 		currentlySelectedAntecedentList.setModel(CurrentlySelectedAntecedentsVector);
 		currentlySelectedAntecedentList.repaint();
 
@@ -1233,57 +1234,58 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				CurrentlySelectedAntecedentsVector.remove(CSA);
 			}
 		}
-		
+
 		if(CurrentlySelectedAntecedentsVector.isEmpty())
 			Tabs.setIconAt(4, uncheck);
-		
+
 		currentlySelectedAntecedentList.setModel(CurrentlySelectedAntecedentsVector);
 		currentlySelectedAntecedentList.repaint();
 	}
 
 	public void derivateAction(java.awt.event.ActionEvent evt){
 
-	  waiting = new Cursor(Cursor.WAIT_CURSOR);
-	  setCursor(waiting);
-	  try {
-	    DerivationMaker DM = new DerivationMaker(aClient);
+		waiting = new Cursor(Cursor.WAIT_CURSOR);
+		setCursor(waiting);
+		try {
+			DerivationMaker DM = new DerivationMaker(aClient);
 
-	    //set conclusion information
-	    DM.setFile(new File(conclusionBrowserTF.getText()));
+			//set conclusion information
+			DM.setFile(new File(conclusionBrowserTF.getText()));
 
-	    IndividualComboBox.Individual docFormatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
-	    DM.setConclusionFormatURI(docFormatInd.getURI());
+			IndividualComboBox.Individual docFormatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
+			DM.setConclusionFormatURI(docFormatInd.getURI());
 
-	    IndividualComboBox.Individual docTypeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
-	    DM.setConclusionTypeURI(docTypeInd.getURI());
+			IndividualComboBox.Individual docTypeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
+			DM.setConclusionTypeURI(docTypeInd.getURI());
 
-	    //set derivation information
-	    IndividualComboBox.Individual agentInd = (IndividualComboBox.Individual) agentComboBox.getSelectedItem();
-	    DM.setAgentURI(agentInd.getURI());
+			//set derivation information
+			IndividualComboBox.Individual agentInd = (IndividualComboBox.Individual) agentComboBox.getSelectedItem();
+			DM.setAgentURI(agentInd.getURI());
 
-	    IndividualComboBox.Individual IRInd = (IndividualComboBox.Individual) inferenceRuleComboBox.getSelectedItem();
-	    DM.setInferenceRuleURI(IRInd.getURI());
+			IndividualComboBox.Individual IRInd = (IndividualComboBox.Individual) inferenceRuleComboBox.getSelectedItem();
+			DM.setInferenceRuleURI(IRInd.getURI());
 
-	    //set antecedents
-	    DM.setAntecedentURIs(CurrentlySelectedAntecedentsVector);
+			//set antecedents
+			DM.setAntecedentURIs(CurrentlySelectedAntecedentsVector);
 
-	    DM.setUsername(username);
-	    DM.setUserPassword(password);
-	    DM.setCIProjectName(selectedProjectSTR);
-	    DM.setCIServerPath(selectedServerSTR);
+			DM.setUsername(username);
+			DM.setUserPassword(password);
+			DM.setCIProjectName(selectedProjectSTR);
+			DM.setCIServerPath(selectedServerSTR);
 
-	    DM.generateDerivation();
+			DM.generateDerivation();
 
-	    refreshAntecedentUI();
-	    
-	  } catch (Throwable e) {
-	    e.printStackTrace();
-	    String errMsg = "Derivation Error: " + e.toString();
-	    JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
+			refreshAntecedentUI();
 
-	  } finally {
-	    setCursor(normal);
-	  }
+		} catch (Throwable e) {
+			e.printStackTrace();
+			String errMsg = "Derivation Error: " + e.toString();
+			JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
+
+		} finally {
+			JOptionPane.showMessageDialog(null, "Derivation Complete.");
+			setCursor(normal);
+		}
 
 	}
 
@@ -1296,56 +1298,48 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		String file = null;
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-		  file = fc.getSelectedFile().getAbsolutePath();
-		  conclusionBrowserTF.setText(file);
+			file = fc.getSelectedFile().getAbsolutePath();
+			conclusionBrowserTF.setText(file);
 		}
 
 		conclusionBrowserTF.setText(file);
 		oFile = fc.getSelectedFile();
-		
-		changeConclusionCheckStatus(new java.awt.event.ActionEvent(this, 0, null));	//passing null values since we don't need them.
-	}
 
-	// not sure what this is supposed to do?
-	private void conclusionBrowserTFActionPerformed(java.awt.event.ActionEvent evt) {
-		if(conclusionBrowserTF.getText().length() > 0)
-			conclusionFromURLTab.setEnabled(false);
-		else
-			conclusionFromURLTab.setEnabled(false);
+		changeConclusionCheckStatus(new java.awt.event.ActionEvent(this, 0, null));	//passing null values since we don't need them.
 	}
 
 	public boolean serverLogin() {
 
 		int intents = 0;
-		
+
 		do{
 			if(aClient == null)
 				aClient = new AlfrescoClient(this);
 			intents++;
 		} while(!aClient.isLoggedIn() && intents < 3);
-		
+
 		if(intents < 3){
 			JOptionPane.showMessageDialog(null, "Too many failed login attempts, derivA will close now.");
 			System.exit(0);
 		}
-		
+
 		return true;
-		
+
 	}
-	
+
 	public void setCredentials(String UN, String PS, String server, String project){
 		initComponents();
-		
+
 		username = UN;
 		password = PS;
 		selectedServerSTR = server;
 		selectedServerLabel.setText(server);
 		selectedProjectSTR = project;
 		selectedProjectLabel.setText(project);
-		
+
 		initTripleStoreComponents();
 	}
-	
+
 	public static void main(String args[]) {
 
 		try {
@@ -1381,6 +1375,55 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		} 
 	}
 
+	class MyDocumentListener implements DocumentListener {
+	    String newline = "\n";
+	 
+	    public void insertUpdate(DocumentEvent ev) {
+			int count = 0;
+
+			IndividualComboBox.Individual formatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
+			IndividualComboBox.Individual typeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
+
+			if(!formatInd.getName().equalsIgnoreCase(" -- Choose Format -- "))
+				count++;
+
+			if(!typeInd.getName().equalsIgnoreCase(" -- Choose Type -- "))
+				count++;
+
+			if(!conclusionBrowserTF.getText().isEmpty())
+				count++;
+
+			if(count == 3)
+				Tabs.setIconAt(1, check);
+			else
+				Tabs.setIconAt(1,uncheck);
+	    }
+	     
+	    public void removeUpdate(DocumentEvent ev) {
+			int count = 0;
+
+			IndividualComboBox.Individual formatInd = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
+			IndividualComboBox.Individual typeInd = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
+
+			if(!formatInd.getName().equalsIgnoreCase(" -- Choose Format -- "))
+				count++;
+
+			if(!typeInd.getName().equalsIgnoreCase(" -- Choose Type -- "))
+				count++;
+
+			if(!conclusionBrowserTF.getText().isEmpty())
+				count++;
+
+			if(count == 3)
+				Tabs.setIconAt(1, check);
+			else
+				Tabs.setIconAt(1,uncheck);
+	    }
+	     
+	    public void changedUpdate(DocumentEvent ev) {
+	    }
+	}
+	
 	class Task extends SwingWorker<Void, Void> {
 		/*
 		 * Main task. Executed in background thread.
@@ -1396,11 +1439,11 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			ProgressBar.setString("Loading Data Formats");
 			conclusionFormatComboBox.queryFormats();
 			setProgress(25);
-			
+
 			ProgressBar.setString("Loading Data Types");
 			conclusionTypeComboBox.queryAgents();
 			setProgress(35);
-			
+
 			ProgressBar.setString("Loading Inference Agents");
 			agentComboBox.queryAgents();
 			setProgress(50);

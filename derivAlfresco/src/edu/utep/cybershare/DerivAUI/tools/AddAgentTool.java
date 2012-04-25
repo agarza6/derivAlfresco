@@ -290,6 +290,7 @@ public class AddAgentTool extends javax.swing.JFrame {
       JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
       
     } finally {
+    	JOptionPane.showMessageDialog(null, "Agent Created.");
       setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
   }
