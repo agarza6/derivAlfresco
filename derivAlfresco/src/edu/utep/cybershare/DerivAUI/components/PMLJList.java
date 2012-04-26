@@ -72,10 +72,10 @@ public class PMLJList extends IndividualList {
 
 				QuerySolution QS = results.nextSolution();
 
-				conclusionName = QS.get("?conclusionURL").toString();
+				conclusionName = QS.get("?nodeset").toString();
 
-				conclusionName = conclusionName.substring(0, conclusionName.indexOf('^'));
-
+				conclusionName = conclusionName.substring(0, conclusionName.indexOf('#'));
+				
 				if(conclusionName.contains("/")){
 					if(conclusionName.lastIndexOf('/') == (conclusionName.length() - 1))
 						conclusionName = conclusionName.substring(0, conclusionName.length() - 1);

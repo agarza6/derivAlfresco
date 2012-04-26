@@ -62,6 +62,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	private formatComboBox conclusionFormatComboBox;
 	private typeComboBox conclusionTypeComboBox;
 	private InferenceRulesComboBox inferenceRuleComboBox;
+	private javax.swing.JComboBox IATypeComboBox;
 
 	//Panels
 	private javax.swing.JPanel mainPanel;
@@ -108,6 +109,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	private javax.swing.JLabel localFileSystemLabel;
 	private javax.swing.JLabel fromServerLabel;
 	private javax.swing.JLabel fromURLLabel;
+	private javax.swing.JLabel IASortByLabel;
 
 	//Buttons
 	private javax.swing.JButton conclusionBrowserButton;
@@ -277,6 +279,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		aboutItem = new javax.swing.JMenuItem();
 		addSourceTool = new javax.swing.JMenuItem();
 		addAgentTool = new javax.swing.JMenuItem();
+		IASortByLabel = new javax.swing.JLabel();
 
 		check = new ImageIcon(getClass().getResource("images/tick.png"));
 		uncheck = new ImageIcon(getClass().getResource("images/checkbox_unchecked.png"));
@@ -668,27 +671,47 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				changeIACheckStatus(evt);
 			}
 		});
+		
+		String[] IATypes = {"Inference Agent", "Inference Engine", "Person", "Organization" };
+		IATypeComboBox = new javax.swing.JComboBox(IATypes);
+		IATypeComboBox.setSelectedIndex(0);
+		IATypeComboBox.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				sortIABy(evt);
+			}
+		});
 
 		javax.swing.GroupLayout IAgentPanelLayout = new javax.swing.GroupLayout(IAgentPanel);
-		IAgentPanel.setLayout(IAgentPanelLayout);
-		IAgentPanelLayout.setHorizontalGroup(
-				IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(IAgentPanelLayout.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(agentComboBox, 0, 557, Short.MAX_VALUE)
-								.addComponent(InferenceAgentLabel))
-								.addContainerGap())
-				);
-		IAgentPanelLayout.setVerticalGroup(
-				IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(IAgentPanelLayout.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(InferenceAgentLabel)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(agentComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(221, Short.MAX_VALUE))
-				);
+        IAgentPanel.setLayout(IAgentPanelLayout);
+        IAgentPanelLayout.setHorizontalGroup(
+            IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(IAgentPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(IAgentPanelLayout.createSequentialGroup()
+                        .addGroup(IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(InferenceAgentLabel)
+                            .addGroup(IAgentPanelLayout.createSequentialGroup()
+                                .addComponent(IASortByLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(IATypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 469, Short.MAX_VALUE))
+                    .addComponent(agentComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        IAgentPanelLayout.setVerticalGroup(
+            IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(IAgentPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(InferenceAgentLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(IASortByLabel)
+                    .addComponent(IATypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addComponent(agentComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(187, Short.MAX_VALUE))
+        );
 
 		Tabs.addTab("Inference Agent", IAIcon, IAgentPanel);
 		InferenceRuleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -838,7 +861,12 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		fileMenu.add(loadWDOItem);
 
 		loadSAWItem.setText("Load SAW");
-		fileMenu.add(loadSAWItem).setEnabled(false);
+		loadSAWItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				openWorkflowToolAction(evt);
+			}
+		});
+		fileMenu.add(loadSAWItem);
 		fileMenu.add(jSeparator3);
 
 		CloseItem.setText("Close");
@@ -941,6 +969,11 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		about.setVisible(true);
 	}
 
+	public void sortIABy(java.awt.event.ActionEvent evt){
+		int selection = IATypeComboBox.getSelectedIndex();
+		refreshInferenceAgentUI(selection);
+	}
+	
 	public void changeIACheckStatus(java.awt.event.ActionEvent evt){
 		IndividualComboBox.Individual agentInd = (IndividualComboBox.Individual) agentComboBox.getSelectedItem();
 		if(!agentInd.getName().equalsIgnoreCase(" -- Choose Agent -- "))
@@ -1067,8 +1100,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		SourcesList.repaint();
 	}
 
-	public void refreshInferenceAgentUI(){
-		agentComboBox.queryAgents();
+	public void refreshInferenceAgentUI(int sel){
+		agentComboBox.queryAgents(sel);
 		agentComboBox.repaint();
 	}
 
@@ -1176,6 +1209,10 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		new OpenOntologyTool(instance, aClient).setVisible(true);
 	}
 
+	public void openWorkflowToolAction(java.awt.event.ActionEvent evt){
+		new OpenWorkflowTool(instance, aClient).setVisible(true);
+	}
+	
 	public void addSourceAction(java.awt.event.ActionEvent evt){
 		Object CSS = SourcesList.getSelectedValue();
 		if(CurrentlySelectedSourcesVector != null){
@@ -1445,7 +1482,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			setProgress(35);
 
 			ProgressBar.setString("Loading Inference Agents");
-			agentComboBox.queryAgents();
+			agentComboBox.queryAgents(0);
 			setProgress(50);
 
 			ProgressBar.setString("Loading Inference Rules");

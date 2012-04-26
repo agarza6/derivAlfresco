@@ -282,7 +282,7 @@ public class AddAgentTool extends javax.swing.JFrame {
       if(aClient != null)
         aClient.crawlProject(project);
 
-      instance.refreshInferenceAgentUI();
+      instance.refreshInferenceAgentUI(0);
       
     } catch (Throwable e) {
       e.printStackTrace();

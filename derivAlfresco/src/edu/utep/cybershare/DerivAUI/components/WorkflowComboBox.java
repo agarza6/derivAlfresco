@@ -21,79 +21,72 @@ import java.util.Vector;
 
 import java.util.HashMap;
 
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 
 import edu.utep.cybershare.DerivA.util.AlfrescoClient;
 
-public class AgentComboBox extends IndividualComboBox {
+public class WorkflowComboBox extends IndividualComboBox {
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,Integer> prettyNames = new HashMap<String,Integer>();
 	private AlfrescoClient aClient;
-
-	public AgentComboBox(boolean bol, int sel) {
+	
+	public WorkflowComboBox(String project) {
 		super();
-		if(bol)
-			queryAgents(sel);
+		queryOntologies(project);
 	}
-
-	public AgentComboBox(AlfrescoClient ac) {
+	
+	public WorkflowComboBox(String project, AlfrescoClient ac) {
 		super();
 		aClient = ac;
+		queryOntologies(project);
 	}
-
+	
 	public static String stripURI(String formatURI)
 	{
 		int start = formatURI.indexOf('#') + 1;
 		String name = formatURI.substring(start);
-
+		
 		return name;
 	}
 
-	public void queryAgents(int selection) {
+	public void queryOntologies(String project) {
 		Vector<Individual> individuals = new Vector<Individual>();
 
-		String query = "";
-		switch (selection){
-		case 0: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" + 
-				"SELECT ?uri " + 
-				"WHERE {?uri a pmlp:Agent }";
-		break;
-		case 1: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
-				"SELECT ?uri " +
-				"WHERE { ?uri a pmlp:InferenceEngine . }";
-		break;
-		case 2: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
-				"SELECT ?uri " +
-				"WHERE { ?uri a pmlp:Person . }";
-		break;
-		case 3: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
-				"SELECT ?uri " +
-				"WHERE { ?uri a pmlp:Organization . }";
-		break;
-		}
+		String query = "PREFIX wdo: <http://trust.utep.edu/2.0/wdo.owl#> " +
+				"SELECT ?WDO WHERE {?WDO a wdo:SemanticAbstractWorkflow . }";
 
-		String agents = aClient.executeQuery(query);
-//		System.out.println(agents);
+		String WDOs = aClient.executeQuery(query);
+		
+		ResultSet results = ResultSetFactory.fromXML(WDOs);
+		
+//		System.out.println(project);
+//		System.out.println(WDOs);
+//		System.out.println(results);
+		
+		String WDO, WDOLabel;
 
-		ResultSet results = ResultSetFactory.fromXML(agents);
-
-		String name, uri;
-
-		individuals.add(new Individual("Choose Agent", " -- Choose Agent -- ", "Choose Agent"));
-
+		individuals.add(new Individual("none", " No Ontology Selected ", "none"));
+		
 		// try web service and update local store	
 		if(results != null)
-			while(results.hasNext()){
-
-				uri = results.nextSolution().get("uri").toString();
-				name = stripURI(uri);
-
-				if(name == null || uri == null){
+			while(results.hasNext())
+			{
+				QuerySolution QS = results.nextSolution();
+				WDO = QS.get("?WDO").toString();
+				
+				//WDOLabel = QS.get("?wdoLabel").toString();
+				WDOLabel = WDO.substring(WDO.lastIndexOf('/') + 1);
+		
+				if(WDO == null || WDOLabel == null)
+				{
 					System.out.println("Null Pretty Name Conversion");
 					break;
-				}else{
-					individuals.add(new Individual(uri, name, uri));
+				}
+				else
+				{
+					individuals.add(new Individual(WDO, WDOLabel, WDO));
 				}
 
 				//			System.out.println(results.nextSolution().get("?x").toString());
